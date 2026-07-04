@@ -31,7 +31,7 @@ in
 
     treefmt = {
       enable = mkEnableOption "Treefmt" // {
-        default = inputs.treefmt != null;
+        default = inputs.treefmt-nix != null;
       };
 
       shell = mkOption {
