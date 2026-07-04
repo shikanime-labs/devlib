@@ -54,10 +54,8 @@ in
       '';
     };
 
-    enableDefaultTemplates = mkOption {
-      type = types.bool;
+    enableDefaultTemplates = mkEnableOption "default gitignore templates" // {
       default = true;
-      description = "Prepend a sensible default set of TopTal templates.";
     };
 
     templates = mkOption {

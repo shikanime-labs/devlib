@@ -55,7 +55,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.buf;
-      description = "Buf CLI package to expose in the dev shell.";
+      description = "Buf CLI package to expose in the dev shell";
     };
 
     template = mkOption {
@@ -66,7 +66,7 @@ in
         version = "v2";
         plugins = [ ];
       };
-      description = "Contents of buf.gen.yaml.";
+      description = "Contents of buf.gen.yaml";
       example = literalExpression ''
         {
           version = "v2";

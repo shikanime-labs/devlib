@@ -36,7 +36,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.sops;
-      description = "Sops CLI package to expose in the dev shell.";
+      description = "Sops CLI package to expose in the dev shell";
     };
 
     settings = mkOption {

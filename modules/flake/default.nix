@@ -13,37 +13,31 @@ let
 in
 {
   options.devlib = {
-    devenv = {
-      enable = mkOption {
-        type = types.bool;
-        default = inputs.devenv != null;
-        description = "Enable devenv.";
-      };
+    devenv.enable = mkEnableOption "devenv" // {
+      default = inputs.devenv != null;
     };
 
     git-hooks = {
-      enable = mkOption {
-        type = types.bool;
+      enable = mkEnableOption "git-hooks" // {
         default = inputs.git-hooks != null;
-        description = "Enable git-hooks.";
       };
+
       shell = mkOption {
         type = types.str;
         default = "default";
-        description = "The shell package to use for git-hooks and treefmt.";
+        description = "The shell package to use for git-hooks and treefmt";
       };
     };
 
     treefmt = {
-      enable = mkOption {
-        type = types.bool;
-        default = inputs.treefmt-nix != null;
-        description = "Enable treefmt.";
+      enable = mkEnableOption "Treefmt" // {
+        default = inputs.treefmt != null;
       };
+
       shell = mkOption {
         type = types.str;
         default = "default";
-        description = "The shell package to use for treefmt.";
+        description = "The shell package to use for treefmt";
       };
     };
   };

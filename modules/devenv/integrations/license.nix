@@ -17,7 +17,7 @@ in
     package = mkOption {
       type = types.functionTo types.package;
       default = license.generate;
-      description = "License generator function.";
+      description = "License generator function";
     };
 
     lib = lib.mkOption {
@@ -26,17 +26,17 @@ in
 
     holder = mkOption {
       type = types.str;
-      description = "Copyright holder.";
+      description = "Copyright holder";
     };
 
     year = mkOption {
       type = types.str;
-      description = "Override year; null lets the generator use the current year.";
+      description = "Override year; null lets the generator use the current year";
     };
 
     description = mkOption {
       type = types.str;
-      description = "Project description to use in the license text (unused for some licenses).";
+      description = "Project description to use in the license text (unused for some licenses)";
     };
   };
 

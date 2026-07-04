@@ -17,7 +17,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.ghstack;
-      description = "The ghstack package to use.";
+      description = "The ghstack package to use";
     };
   };
 

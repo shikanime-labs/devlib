@@ -114,11 +114,11 @@
           templates = {
             default = {
               path = ./templates/default;
-              description = "A devenv template with default settings.";
+              description = "A devenv template with default settings";
             };
             remote = {
               path = ./templates/remote;
-              description = "A simple direnv with remote flake.";
+              description = "A simple direnv with remote flake";
             };
           };
         };
