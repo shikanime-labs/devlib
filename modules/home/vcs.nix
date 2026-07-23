@@ -1,11 +1,10 @@
 { pkgs, ... }:
 
 {
-  home.packages = [
-    pkgs.ghstack
-    pkgs.sapling
-    pkgs.tea
-    pkgs.glab
+  home.packages = with pkgs; [
+    ghstack
+    tea
+    glab
   ];
 
   programs.gh.enable = true;
