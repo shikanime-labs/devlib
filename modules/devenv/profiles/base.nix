@@ -25,11 +25,10 @@ in
       "config:best-practices"
       "security:openssf-scorecard"
     ];
-    postUpgradeTasks.nixFmt = {
-      commands = [
-        "nix"
-        "fmt"
-      ];
+    postUpgradeTasks = {
+      commands = [ "nix fmt" ];
+      fileFilters = [ "**/*.nix" ];
+      executionMode = "branch";
       installTools.nix = { };
     };
   };
