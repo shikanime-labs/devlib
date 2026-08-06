@@ -77,7 +77,7 @@ in
                 gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
                 gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
                 sign-commits = true;
-                username = "operator6o";
+                username = "yorha-automata";
               }
               // cfg.settings.checkout;
             }
@@ -85,7 +85,7 @@ in
               uses = "shikanime-studio/actions/update@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                username = "operator6o";
+                username = "yorha-automata";
               }
               // cfg.settings.update;
             }

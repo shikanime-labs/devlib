@@ -122,7 +122,7 @@ in
               uses = "shikanime-studio/actions/command/close@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                username = "operator6o";
+                username = "yorha-automata";
               }
               // cfg.settings.close;
             }
@@ -158,9 +158,9 @@ in
               uses = "shikanime-studio/actions/command/land@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                email = "operator6o@shikanime.studio";
-                fullname = "Operator 6O";
-                username = "operator6o";
+                email = "automata@shikanime.studio";
+                fullname = "Automata";
+                username = "yorha-automata";
                 gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
                 gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
                 sign-commits = true;
@@ -197,9 +197,9 @@ in
               uses = "shikanime-studio/actions/command/rebase@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                email = "operator6o@shikanime.studio";
-                fullname = "Operator 6O";
-                username = "operator6o";
+                email = "automata@shikanime.studio";
+                fullname = "Automata";
+                username = "yorha-automata";
                 gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
                 gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
                 sign-commits = true;
