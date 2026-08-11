@@ -43,7 +43,6 @@ in
 
   config = mkIf cfg.enable {
     tasks."devlib:renovate:install" = {
-      before = [ "devenv:enterShell" ] ++ optional config.treefmt.enable "devenv:treefmt:run";
       description = "Install renovate configuration";
       exec =
         if config.github.enable then

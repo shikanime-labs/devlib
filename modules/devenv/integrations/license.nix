@@ -95,7 +95,6 @@ in
     };
 
     tasks."devlib:license:install" = {
-      before = [ "devenv:enterShell" ];
       description = "Install LICENSE file";
       exec = ''
         ${pkgs.coreutils}/bin/cat ${cfg.package { inherit (cfg) year holder description; }} > LICENSE

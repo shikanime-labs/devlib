@@ -89,7 +89,6 @@ in
     ];
 
     tasks."devlib:gitignore:install" = {
-      before = [ "devenv:enterShell" ];
       description = "Generate .gitignore file";
       exec = optionalString (templates != [ ] || cfg.content != [ ]) ''
         {

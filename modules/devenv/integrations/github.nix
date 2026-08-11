@@ -79,7 +79,6 @@ in
     git-hooks.hooks.action-validator.enable = true;
 
     tasks."devlib:github:workflows:install" = {
-      before = [ "devenv:enterShell" ] ++ optional config.treefmt.enable "devenv:treefmt:run";
       description = "Install GitHub Actions workflow files";
       exec = concatStringsSep "\n" (
         mapAttrsToList (name: workflow: ''
