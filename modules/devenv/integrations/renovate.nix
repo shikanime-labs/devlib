@@ -12,7 +12,45 @@ let
 
   jsonFormat = pkgs.formats.json { };
 
-  settings = cfg.settings // {
+  # Renovate renamed these fields (renovatebot config migrations). Wrap bare
+  # regex patterns in /.../ delimiters on the way out so the generated config
+  # stays valid without consumers having to update their flake.
+  # ponytail: covers only fileMatch/matchPackagePatterns renames from PR1732; extend here when Renovate deprecates more.
+  migrateSettings =
+    settings:
+    let
+      wrap = p: "/${p}/";
+
+      flux' =
+        if settings ? flux && settings.flux ? fileMatch then
+          removeAttrs settings.flux [ "fileMatch" ]
+          // {
+            managerFilePatterns = map wrap settings.flux.fileMatch;
+          }
+        else
+          settings.flux or { };
+
+      packageRules' = map (
+        rule:
+        if rule ? matchPackagePatterns then
+          removeAttrs rule [ "matchPackagePatterns" ]
+          // {
+            matchPackageNames = map wrap rule.matchPackagePatterns;
+          }
+        else
+          rule
+      ) (settings.packageRules or [ ]);
+
+      base = removeAttrs settings [
+        "flux"
+        "packageRules"
+      ];
+    in
+    base
+    // optionalAttrs (flux' != { }) { flux = flux'; }
+    // optionalAttrs (settings ? packageRules) { packageRules = packageRules'; };
+
+  settings = migrateSettings cfg.settings // {
     "$schema" = "https://docs.renovatebot.com/renovate-schema.json";
   };
 
