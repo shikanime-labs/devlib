@@ -28,8 +28,8 @@
       },
       "original": {
         "owner": "cachix",
-        "ref": "latest",
         "repo": "cachix",
+        "rev": "a66a440c321d35f7193472c317f42a55ccd1cb93",
         "type": "github"
       }
     },
@@ -80,6 +80,7 @@
       "original": {
         "owner": "cachix",
         "repo": "devenv",
+        "rev": "5844e78c960ab73bb92e131bc2902b39b9ee52dd",
         "type": "github"
       }
     },
@@ -207,8 +208,8 @@
       },
       "original": {
         "owner": "cachix",
-        "ref": "devenv-2.35",
         "repo": "nix",
+        "rev": "f521bcc0b07d80921104a973996823392d247f7a",
         "type": "github"
       }
     },
@@ -249,8 +250,8 @@
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "rev": "391b592eb44808b3bd0cb80bb71b63a5a118b8bb",
         "type": "github"
       }
     },

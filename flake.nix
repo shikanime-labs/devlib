@@ -1,8 +1,10 @@
 {
   inputs = {
     devenv = {
-      url = "github:cachix/devenv";
+      url = "github:cachix/devenv/5844e78c960ab73bb92e131bc2902b39b9ee52dd";
       inputs = {
+        cachix.url = "github:cachix/cachix/a66a440c321d35f7193472c317f42a55ccd1cb93";
+        nix.url = "github:cachix/nix/f521bcc0b07d80921104a973996823392d247f7a";
         flake-parts.follows = "flake-parts";
         git-hooks.follows = "git-hooks";
         nixpkgs.follows = "nixpkgs";
@@ -19,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/391b592eb44808b3bd0cb80bb71b63a5a118b8bb";
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
