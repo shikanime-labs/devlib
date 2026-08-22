@@ -117,7 +117,13 @@ in {
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
-              )            ];
+              )
+              {
+                name = "Run flake check";
+                run = "nix flake check --accept-flake-config --no-pure-eval --system \"\${{ matrix.system }}\"";
+                shell = "bash";
+              }
+            ];
           };
 
           packages = {
@@ -170,7 +176,15 @@ in {
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
-              )            ];
+              )
+              {
+                uses = "shikanime-labs/actions/nix/integration@v9";
+                "with" = {
+                  name = "\${{ matrix.name }}";
+                  system = "\${{ matrix.system }}";
+                };
+              }
+            ];
           };
 
           setup-checks-jobs = {
