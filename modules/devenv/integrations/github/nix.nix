@@ -119,7 +119,14 @@ in {
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
               {
-                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
+                name = "Apply direnv environment";
+                env = {
+                  DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
+                };
+                run = ''
+                  echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
+                '';
+              {
                 run = "nix flake check --accept-flake-config --no-pure-eval --system \"\${{ matrix.system }}\"";
                 shell = "bash";
               }
@@ -178,7 +185,14 @@ in {
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
               {
-                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
+                name = "Apply direnv environment";
+                env = {
+                  DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
+                };
+                run = ''
+                  echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
+                '';
+              {
                 uses = "shikanime-labs/actions/nix/integration@v9";
                 "with" = {
                   name = "\${{ matrix.name }}";
