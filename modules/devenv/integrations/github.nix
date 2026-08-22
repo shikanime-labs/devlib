@@ -87,7 +87,6 @@ in
     };
 
     treefmt.config.programs = {
-      actionlint.enable = true;
       zizmor = {
         enable = true;
         includes = [
