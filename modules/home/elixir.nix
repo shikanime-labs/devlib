@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   home.packages = [
     pkgs.beamPackages.elixir-ls
     pkgs.beamPackages.elixir

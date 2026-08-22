@@ -1,5 +1,5 @@
 {
-  gitignore.templates = ["tt:ocaml"];
+  gitignore.templates = [ "tt:ocaml" ];
 
   languages.ocaml.enable = true;
 

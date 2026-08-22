@@ -1,9 +1,9 @@
 {
-  imports = [./base.nix];
+  imports = [ ./base.nix ];
 
   git-hooks.hooks.clippy.enable = true;
 
-  gitignore.templates = ["gh:Rust"];
+  gitignore.templates = [ "gh:Rust" ];
 
   renovate.settings.cargo.enabled = true;
 

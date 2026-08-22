@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.nushell.extraConfig = ''
     use ${pkgs.nu_scripts}/share/nu_scripts/modules/argx *
     use ${pkgs.nu_scripts}/share/nu_scripts/modules/lg *

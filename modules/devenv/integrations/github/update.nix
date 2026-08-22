@@ -4,38 +4,40 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.github.workflows.update;
 
-  yamlFormat = pkgs.formats.yaml {};
-in {
+  yamlFormat = pkgs.formats.yaml { };
+in
+{
   options.github.workflows.update = {
     enable = mkEnableOption "update";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for checkout 'with' section";
       };
       create-github-app-token = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for create-github-app-token 'with' section";
       };
       setup-nix = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for setup-nix 'with' section";
       };
       stale = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for stale 'with' section";
       };
       update = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for update 'with' section";
       };
     };
@@ -50,44 +52,40 @@ in {
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" =
-                {
-                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "write";
-                  permission-pull-requests = "write";
-                  permission-workflows = "write";
-                }
-                // cfg.settings.create-github-app-token;
+              "with" = {
+                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                permission-contents = "write";
+                permission-pull-requests = "write";
+                permission-workflows = "write";
+              }
+              // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" =
-                {
-                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                }
-                // cfg.settings.setup-nix;
+              "with" = {
+                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+              }
+              // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/checkout@v9";
-              "with" =
-                {
-                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                  gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                  gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                  sign-commits = true;
-                  username = "yorha-automata";
-                }
-                // cfg.settings.checkout;
+              "with" = {
+                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
+                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
+                sign-commits = true;
+                username = "yorha-automata";
+              }
+              // cfg.settings.checkout;
             }
             {
               uses = "shikanime-labs/actions/update@v9";
-              "with" =
-                {
-                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                  username = "yorha-automata";
-                }
-                // cfg.settings.update;
+              "with" = {
+                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                username = "yorha-automata";
+              }
+              // cfg.settings.update;
             }
           ];
         };
@@ -97,26 +95,24 @@ in {
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" =
-                {
-                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-issues = "write";
-                  permission-pull-requests = "write";
-                }
-                // cfg.settings.create-github-app-token;
+              "with" = {
+                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                permission-issues = "write";
+                permission-pull-requests = "write";
+              }
+              // cfg.settings.create-github-app-token;
             }
             {
               uses = "actions/stale@v11";
-              "with" =
-                {
-                  days-before-close = 14;
-                  days-before-stale = 30;
-                  repo-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                  stale-issue-label = "stale";
-                  stale-pr-label = "stale";
-                }
-                // cfg.settings.stale;
+              "with" = {
+                days-before-close = 14;
+                days-before-stale = 30;
+                repo-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                stale-issue-label = "stale";
+                stale-pr-label = "stale";
+              }
+              // cfg.settings.stale;
             }
           ];
         };
@@ -124,9 +120,9 @@ in {
       name = "Update";
       on = {
         schedule = [
-          {cron = "0 4 * * 0";}
+          { cron = "0 4 * * 0"; }
         ];
-        workflow_dispatch = {};
+        workflow_dispatch = { };
       };
       permissions.contents = "read";
     };

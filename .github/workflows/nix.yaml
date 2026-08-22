@@ -51,9 +51,10 @@ jobs:
             }}
       - id: direnv
         uses: shikanime-labs/actions/direnv@v9
-
       - name: Run flake check
-        run: nix flake check --accept-flake-config --no-pure-eval --system "${{ matrix.system }}"
+        run:
+          nix flake check --accept-flake-config --no-pure-eval --system "${{
+          matrix.system }}"
         shell: bash
   packages:
     name: Packages
@@ -90,7 +91,6 @@ jobs:
             }}
       - id: direnv
         uses: shikanime-labs/actions/direnv@v9
-
       - uses: shikanime-labs/actions/nix/integration@v9
         with:
           name: ${{ matrix.name }}

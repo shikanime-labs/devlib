@@ -2,12 +2,15 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   configDir =
-    if pkgs.stdenv.hostPlatform.isDarwin
-    then "${config.home.homeDirectory}/Library/Application Support/skaffold"
-    else "${config.xdg.configHome}/skaffold";
-in {
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${config.home.homeDirectory}/Library/Application Support/skaffold"
+    else
+      "${config.xdg.configHome}/skaffold";
+in
+{
   home = {
     packages = [
       pkgs.kind

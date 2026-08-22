@@ -4,40 +4,42 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.github.workflows.javascript;
 
-  yamlFormat = pkgs.formats.yaml {};
+  yamlFormat = pkgs.formats.yaml { };
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
-in {
+in
+{
   options.github.workflows.javascript = {
     enable = mkEnableOption "javascript";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for checkout";
       };
       create-github-app-token = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for create-github-app-token";
       };
       direnv = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for direnv";
       };
       integration = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for javascript integration";
       };
       setup-nix = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for setup-nix";
       };
     };
@@ -48,7 +50,7 @@ in {
       github.settings.workflows.javascript = {
         name = "JavaScript";
         on.workflow_call.secrets.OPERATOR_PRIVATE_KEY.required = true;
-        on.workflow_dispatch = {};
+        on.workflow_dispatch = { };
 
         permissions.contents = "read";
 
@@ -61,42 +63,39 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
+                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               (
                 {
                   uses = "shikanime-labs/actions/pnpm/integration@v9";
                 }
-                // optionalAttrs (cfg.settings.integration != {}) {"with" = cfg.settings.integration;}
+                // optionalAttrs (cfg.settings.integration != { }) { "with" = cfg.settings.integration; }
               )
             ];
           };
@@ -109,44 +108,40 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
+                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               {
                 uses = "shikanime-labs/actions/pnpm/integration@v9";
-                "with" =
-                  {
-                    recursive = true;
-                  }
-                  // cfg.settings.integration;
+                "with" = {
+                  recursive = true;
+                }
+                // cfg.settings.integration;
               }
             ];
           };
@@ -158,7 +153,8 @@ in {
       github.settings.workflows.integration = {
         jobs = {
           javascript = {
-            "if" = "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
+            "if" =
+              "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
             uses = "./.github/workflows/javascript.yaml";
             secrets.OPERATOR_PRIVATE_KEY = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
           };
@@ -175,7 +171,7 @@ in {
             secrets.OPERATOR_PRIVATE_KEY = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
           };
 
-          release.needs = ["javascript"];
+          release.needs = [ "javascript" ];
         };
         on.workflow_call.secrets.OPERATOR_PRIVATE_KEY.required = mkDefault true;
       };

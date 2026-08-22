@@ -4,28 +4,30 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.sops;
 
-  yamlFormat = pkgs.formats.yaml {};
+  yamlFormat = pkgs.formats.yaml { };
 
   configFile = yamlFormat.generate "sops.yaml" cfg.settings;
 
-  addFlagsConfigArg = lib.optionalString (cfg.settings != {}) ''
+  addFlagsConfigArg = lib.optionalString (cfg.settings != { }) ''
     --add-flags "--config ${configFile}"
   '';
 
   wrapped =
     pkgs.runCommand "sops-wrapped"
-    {
-      buildInputs = [pkgs.makeWrapper];
-      meta.mainProgram = "sops";
-    }
-    ''
-      makeWrapper ${cfg.package}/bin/sops $out/bin/sops \
-        ${addFlagsConfigArg}
-    '';
-in {
+      {
+        buildInputs = [ pkgs.makeWrapper ];
+        meta.mainProgram = "sops";
+      }
+      ''
+        makeWrapper ${cfg.package}/bin/sops $out/bin/sops \
+          ${addFlagsConfigArg}
+      '';
+in
+{
   options.sops = {
     enable = mkEnableOption "Sops configuration generator";
 
@@ -39,13 +41,13 @@ in {
       type = types.submodule {
         freeformType = yamlFormat.type;
       };
-      default = {};
+      default = { };
       description = "SOPS YAML configuration passed via --config";
     };
   };
 
   config = mkIf cfg.enable {
-    packages = [wrapped];
+    packages = [ wrapped ];
 
     tasks."devlib:sops:updatekeys" = {
       description = "Run sops updatekeys";

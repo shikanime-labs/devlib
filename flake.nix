@@ -42,106 +42,109 @@
     ];
   };
 
-  outputs = inputs @ {
-    devenv,
-    flake-parts,
-    git-hooks,
-    treefmt-nix,
-    self,
-    ...
-  }:
-    flake-parts.lib.mkFlake {inherit inputs;} (
-      {flake-parts-lib, ...}:
-        with flake-parts-lib; let
-          defaultFlakeModule = importApply ./modules/flake/default.nix {};
-        in {
-          imports = [
-            defaultFlakeModule
-            devenv.flakeModule
-            flake-parts.flakeModules.easyOverlay
-            git-hooks.flakeModule
-            treefmt-nix.flakeModule
-          ];
+  outputs =
+    inputs@{
+      devenv,
+      flake-parts,
+      git-hooks,
+      treefmt-nix,
+      self,
+      ...
+    }:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      { flake-parts-lib, ... }:
+      with flake-parts-lib;
+      let
+        defaultFlakeModule = importApply ./modules/flake/default.nix { };
+      in
+      {
+        imports = [
+          defaultFlakeModule
+          devenv.flakeModule
+          flake-parts.flakeModules.easyOverlay
+          git-hooks.flakeModule
+          treefmt-nix.flakeModule
+        ];
 
-          flake = {
-            devenvModule = ./modules/devenv/profiles/default.nix;
-            devenvModules = {
-              default = self.devenvModule;
-              docker = ./modules/devenv/profiles/docker.nix;
-              elixir = ./modules/devenv/profiles/elixir.nix;
-              git = ./modules/devenv/profiles/git.nix;
-              go = ./modules/devenv/profiles/go.nix;
-              javascript = ./modules/devenv/profiles/javascript.nix;
-              nix = ./modules/devenv/profiles/nix.nix;
-              ocaml = ./modules/devenv/profiles/ocaml.nix;
-              opentofu = ./modules/devenv/profiles/opentofu.nix;
-              python = ./modules/devenv/profiles/python.nix;
-              rust = ./modules/devenv/profiles/rust.nix;
-              skaffold = ./modules/devenv/profiles/skaffold.nix;
-              shell = ./modules/devenv/profiles/shell.nix;
-              shikanime = ./modules/devenv/shells/shikanime.nix;
-              shikanime-studio = ./modules/devenv/shells/shikanime-studio.nix;
-              texlive = ./modules/devenv/profiles/texlive.nix;
-            };
-
-            homeModule = ./modules/home/default.nix;
-            homeModules = {
-              default = self.homeModule;
-              docker = ./modules/home/docker.nix;
-              elixir = ./modules/home/elixir.nix;
-              go = ./modules/home/go.nix;
-              javascript = ./modules/home/javascript.nix;
-              k8s = ./modules/home/k8s.nix;
-              nix = ./modules/home/nix.nix;
-              python = ./modules/home/python.nix;
-              rust = ./modules/home/rust.nix;
-              shell = ./modules/home/shell.nix;
-              typst = ./modules/home/typst.nix;
-              unix = ./modules/home/unix.nix;
-              vcs = ./modules/home/vcs.nix;
-              yaml = ./modules/home/formats.nix;
-            };
-
-            flakeModule = defaultFlakeModule;
-            flakeModules = {
-              default = defaultFlakeModule;
-              treefmt = treefmtFlakeModule;
-            };
-
-            templates = {
-              default = {
-                path = ./templates/default;
-                description = "A devenv template with default settings";
-              };
-              remote = {
-                path = ./templates/remote;
-                description = "A simple direnv with remote flake";
-              };
-            };
+        flake = {
+          devenvModule = ./modules/devenv/profiles/default.nix;
+          devenvModules = {
+            default = self.devenvModule;
+            docker = ./modules/devenv/profiles/docker.nix;
+            elixir = ./modules/devenv/profiles/elixir.nix;
+            git = ./modules/devenv/profiles/git.nix;
+            go = ./modules/devenv/profiles/go.nix;
+            javascript = ./modules/devenv/profiles/javascript.nix;
+            nix = ./modules/devenv/profiles/nix.nix;
+            ocaml = ./modules/devenv/profiles/ocaml.nix;
+            opentofu = ./modules/devenv/profiles/opentofu.nix;
+            python = ./modules/devenv/profiles/python.nix;
+            rust = ./modules/devenv/profiles/rust.nix;
+            skaffold = ./modules/devenv/profiles/skaffold.nix;
+            shell = ./modules/devenv/profiles/shell.nix;
+            shikanime = ./modules/devenv/shells/shikanime.nix;
+            shikanime-studio = ./modules/devenv/shells/shikanime-studio.nix;
+            texlive = ./modules/devenv/profiles/texlive.nix;
           };
 
-          perSystem = {config, ...}: {
-            devenv.shells.default = {
-              imports = [
-                self.devenvModules.git
-                self.devenvModules.nix
-                self.devenvModules.shell
-                self.devenvModules.shikanime-studio
-              ];
-              license = {
-                enable = true;
-                holder = "Shikanime Studio";
-                package = config.devenv.shells.default.license.lib.pkgs.asl20;
-                year = "2025";
-              };
-            };
+          homeModule = ./modules/home/default.nix;
+          homeModules = {
+            default = self.homeModule;
+            docker = ./modules/home/docker.nix;
+            elixir = ./modules/home/elixir.nix;
+            go = ./modules/home/go.nix;
+            javascript = ./modules/home/javascript.nix;
+            k8s = ./modules/home/k8s.nix;
+            nix = ./modules/home/nix.nix;
+            python = ./modules/home/python.nix;
+            rust = ./modules/home/rust.nix;
+            shell = ./modules/home/shell.nix;
+            typst = ./modules/home/typst.nix;
+            unix = ./modules/home/unix.nix;
+            vcs = ./modules/home/vcs.nix;
+            yaml = ./modules/home/formats.nix;
           };
 
-          systems = [
-            "x86_64-linux"
-            "aarch64-linux"
-            "aarch64-darwin"
-          ];
-        }
+          flakeModule = defaultFlakeModule;
+          flakeModules = {
+            default = defaultFlakeModule;
+            treefmt = treefmtFlakeModule;
+          };
+
+          templates = {
+            default = {
+              path = ./templates/default;
+              description = "A devenv template with default settings";
+            };
+            remote = {
+              path = ./templates/remote;
+              description = "A simple direnv with remote flake";
+            };
+          };
+        };
+
+        perSystem = { config, ... }: {
+          devenv.shells.default = {
+            imports = [
+              self.devenvModules.git
+              self.devenvModules.nix
+              self.devenvModules.shell
+              self.devenvModules.shikanime-studio
+            ];
+            license = {
+              enable = true;
+              holder = "Shikanime Studio";
+              package = config.devenv.shells.default.license.lib.pkgs.asl20;
+              year = "2025";
+            };
+          };
+        };
+
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "aarch64-darwin"
+        ];
+      }
     );
 }

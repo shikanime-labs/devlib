@@ -200,7 +200,6 @@ Use Home Manager modules from `homeModules.<name>`.
 
 ## Templates
 
-- Initialize a project:
-  `nix flake init -t github:shikanime-labs/devlib#default`
+- Initialize a project: `nix flake init -t github:shikanime-labs/devlib#default`
 - Use a minimal remote direnv setup:
   `nix flake init -t github:shikanime-labs/devlib#remote`

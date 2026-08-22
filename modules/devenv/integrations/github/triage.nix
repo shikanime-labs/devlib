@@ -4,10 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.github.workflows.triage;
 
-  yamlFormat = pkgs.formats.yaml {};
+  yamlFormat = pkgs.formats.yaml { };
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
 
@@ -16,19 +17,20 @@ with lib; let
   mergeCondition =
     "github.event.pull_request.user.login == 'dependabot[bot]' || "
     + "github.event.pull_request.user.login == 'yorha-operator-6o[bot]'";
-in {
+in
+{
   options.github.workflows.triage = {
     enable = mkEnableOption "triage";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for checkout";
       };
       create-github-app-token = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for create-github-app-token";
       };
     };
@@ -43,14 +45,13 @@ in {
             continue-on-error = true;
             id = "createGithubAppToken";
             uses = "actions/create-github-app-token@v3";
-            "with" =
-              {
-                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "read";
-                permission-pull-requests = "write";
-              }
-              // cfg.settings.create-github-app-token;
+            "with" = {
+              client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+              private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+              permission-contents = "read";
+              permission-pull-requests = "write";
+            }
+            // cfg.settings.create-github-app-token;
           }
           {
             uses = "shikanime-labs/actions/nix/setup@v9";
@@ -60,11 +61,10 @@ in {
           }
           {
             uses = "shikanime-labs/actions/checkout@v9";
-            "with" =
-              {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
-              }
-              // cfg.settings.checkout;
+            "with" = {
+              github-token = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
+            }
+            // cfg.settings.checkout;
           }
           {
             "if" = mergeCondition;

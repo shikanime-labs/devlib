@@ -4,45 +4,47 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.github.workflows.nix;
 
-  yamlFormat = pkgs.formats.yaml {};
+  yamlFormat = pkgs.formats.yaml { };
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
-in {
+in
+{
   options.github.workflows.nix = {
     enable = mkEnableOption "nix";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for checkout";
       };
       create-github-app-token = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for create-github-app-token";
       };
       direnv = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for direnv";
       };
       setup-checks-jobs = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for setup-checks-jobs";
       };
       setup-nix = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for setup-nix";
       };
       setup-packages-jobs = mkOption {
-        type = types.submodule {freeformType = yamlFormat.type;};
-        default = {};
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
         description = "Overrides for setup-packages-jobs";
       };
     };
@@ -73,7 +75,7 @@ in {
         jobs = {
           checks = {
             name = "Checks";
-            needs = ["setup-checks-jobs"];
+            needs = [ "setup-checks-jobs" ];
             "if" = "\${{ needs['setup-checks-jobs'].outputs.continue == 'true' }}";
             runs-on = "\${{ matrix.runner }}";
             strategy = {
@@ -85,38 +87,35 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
-                    cachix-name = "\${{ inputs['cachix-name'] }}";
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
+                  cachix-name = "\${{ inputs['cachix-name'] }}";
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
+                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               {
                 name = "Run flake check";
@@ -128,7 +127,7 @@ in {
 
           packages = {
             name = "Packages";
-            needs = ["setup-packages-jobs"];
+            needs = [ "setup-packages-jobs" ];
             "if" = "\${{ needs['setup-packages-jobs'].outputs.continue == 'true' }}";
             runs-on = "\${{ matrix.runner }}";
             permissions = {
@@ -144,38 +143,35 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
-                    cachix-name = "\${{ inputs['cachix-name'] }}";
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
+                  cachix-name = "\${{ inputs['cachix-name'] }}";
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
+                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               {
                 uses = "shikanime-labs/actions/nix/integration@v9";
@@ -199,36 +195,33 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               (
                 {
                   id = "setup-checks-jobs";
                   uses = "shikanime-labs/actions/nix/setup-checks-jobs@v9";
                 }
-                // optionalAttrs (cfg.settings.setup-checks-jobs != {}) {
+                // optionalAttrs (cfg.settings.setup-checks-jobs != { }) {
                   "with" = cfg.settings.setup-checks-jobs;
                 }
               )
@@ -237,7 +230,7 @@ in {
 
           setup-packages-jobs = {
             name = "Setup Packages Jobs";
-            needs = ["checks"];
+            needs = [ "checks" ];
             runs-on = "ubuntu-latest";
             outputs = {
               continue = "\${{ steps.setup-packages-jobs.outputs.continue }}";
@@ -248,36 +241,33 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.setup-nix;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.setup-nix;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" =
-                  {
-                    github-token = githubToken;
-                  }
-                  // cfg.settings.checkout;
+                "with" = {
+                  github-token = githubToken;
+                }
+                // cfg.settings.checkout;
               }
               (
                 {
                   id = "setup-packages-jobs";
                   uses = "shikanime-labs/actions/nix/setup-packages-jobs@v9";
                 }
-                // optionalAttrs (cfg.settings.setup-packages-jobs != {}) {
+                // optionalAttrs (cfg.settings.setup-packages-jobs != { }) {
                   "with" = cfg.settings.setup-packages-jobs;
                 }
               )
@@ -291,7 +281,8 @@ in {
       github.settings.workflows.integration = {
         jobs = {
           nix = {
-            "if" = "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
+            "if" =
+              "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
             uses = "./.github/workflows/nix.yaml";
             permissions = {
               contents = "read";
@@ -325,7 +316,7 @@ in {
             };
           };
 
-          release.needs = ["nix"];
+          release.needs = [ "nix" ];
         };
         on.workflow_call.secrets = {
           CACHIX_AUTH_TOKEN.required = mkDefault true;

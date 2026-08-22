@@ -3,7 +3,8 @@ permissions:
   contents: read
 jobs:
   nix:
-    if: ${{ github.event_name == 'workflow_call' || github.event_name ==
+    if:
+      ${{ github.event_name == 'workflow_call' || github.event_name ==
       'workflow_dispatch' || github.event.pull_request.draft == false }}
     permissions:
       contents: read

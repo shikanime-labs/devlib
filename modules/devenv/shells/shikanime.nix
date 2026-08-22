@@ -1,6 +1,7 @@
-{lib, ...}:
-with lib; {
-  containers = mkForce {};
+{ lib, ... }:
+with lib;
+{
+  containers = mkForce { };
 
   ghstack.enable = true;
 

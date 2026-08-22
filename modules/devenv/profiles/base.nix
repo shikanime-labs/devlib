@@ -3,21 +3,23 @@
   pkgs,
   ...
 }:
-with lib; let
-  jsonFormat = pkgs.formats.json {};
+with lib;
+let
+  jsonFormat = pkgs.formats.json { };
 
   configFile = jsonFormat.generate ".oxfmtrc.json" {
     printWidth = 80;
     proseWrap = "always";
   };
-in {
-  imports = [./default.nix];
+in
+{
+  imports = [ ./default.nix ];
 
   git-hooks.hooks.trufflehog.enable = true;
 
   gitignore = {
     enable = true;
-    content = [".pre-commit-config.yaml"];
+    content = [ ".pre-commit-config.yaml" ];
   };
 
   renovate.settings = {
@@ -26,10 +28,10 @@ in {
       "security:openssf-scorecard"
     ];
     postUpgradeTasks = {
-      commands = ["nix fmt"];
-      fileFilters = ["**/*.nix"];
+      commands = [ "nix fmt" ];
+      fileFilters = [ "**/*.nix" ];
       executionMode = "branch";
-      installTools.nix = {};
+      installTools.nix = { };
     };
   };
 

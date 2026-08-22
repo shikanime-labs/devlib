@@ -4,15 +4,14 @@
   config,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.github;
-  yamlFormat = pkgs.formats.yaml {};
+  yamlFormat = pkgs.formats.yaml { };
 
-  configFiles =
-    mapAttrs (
-      name: workflow: yamlFormat.generate "${name}.yaml" (removeAttrs workflow ["actions"])
-    )
-    cfg.settings.workflows;
+  configFiles = mapAttrs (
+    name: workflow: yamlFormat.generate "${name}.yaml" (removeAttrs workflow [ "actions" ])
+  ) cfg.settings.workflows;
 
   zizmorConfigFile = yamlFormat.generate "zizmor.yml" {
     # TODO: Refactor file generation pipeline to avoid GitHub rate limit using
@@ -23,7 +22,8 @@ with lib; let
       unpinned-uses.disable = true;
     };
   };
-in {
+in
+{
   imports = [
     ./github/cleanup.nix
     ./github/commands.nix
@@ -56,23 +56,23 @@ in {
                   freeformType = yamlFormat.type;
                 }
               );
-              default = {};
+              default = { };
               description = "Global actions configuration";
             };
           };
-          default = {};
+          default = { };
         };
       };
       workflows = mkOption {
         description = "Workflows configuration";
         type = types.attrsOf yamlFormat.type;
-        default = {};
+        default = { };
       };
     };
   };
 
   config = mkIf cfg.enable {
-    packages = [cfg.package];
+    packages = [ cfg.package ];
 
     git-hooks.hooks.action-validator.enable = true;
 
@@ -82,8 +82,7 @@ in {
         mapAttrsToList (name: workflow: ''
           mkdir -p "${config.env.DEVENV_ROOT}/.github/workflows"
           cat ${workflow} > "${config.env.DEVENV_ROOT}/.github/workflows/${name}.yaml"
-        '')
-        configFiles
+        '') configFiles
       );
     };
 
