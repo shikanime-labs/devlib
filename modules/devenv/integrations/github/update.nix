@@ -25,20 +25,10 @@ in
         default = { };
         description = "Overrides for create-github-app-token 'with' section";
       };
-      setup-nix = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
-        description = "Overrides for setup-nix 'with' section";
-      };
       stale = mkOption {
         type = types.submodule { freeformType = yamlFormat.type; };
         default = { };
         description = "Overrides for stale 'with' section";
-      };
-      update = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
-        description = "Overrides for update 'with' section";
       };
     };
   };
@@ -46,49 +36,6 @@ in
   config = mkIf config.github.workflows.update.enable {
     github.settings.workflows.update = {
       jobs = {
-        dependencies = {
-          runs-on = "ubuntu-slim";
-          steps = [
-            {
-              id = "createGithubAppToken";
-              uses = "actions/create-github-app-token@v3";
-              "with" = {
-                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "write";
-                permission-pull-requests = "write";
-                permission-workflows = "write";
-              }
-              // cfg.settings.create-github-app-token;
-            }
-            {
-              uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
-            }
-            {
-              uses = "shikanime-labs/actions/checkout@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                sign-commits = true;
-                username = "yorha-automata";
-              }
-              // cfg.settings.checkout;
-            }
-            {
-              uses = "shikanime-labs/actions/update@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                username = "yorha-automata";
-              }
-              // cfg.settings.update;
-            }
-          ];
-        };
         stale = {
           runs-on = "ubuntu-slim";
           steps = [
