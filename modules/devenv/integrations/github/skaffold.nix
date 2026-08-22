@@ -166,7 +166,6 @@ in {
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
-              (              )
               (
                 {
                   id = "skaffold";
@@ -254,7 +253,15 @@ in {
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
-              )                  // optionalAttrs (cfg.settings.integration != {}) cfg.settings.integration;
+              )
+              {
+                uses = "shikanime-labs/actions/skaffold/integration@v9";
+                "with" =
+                  {
+                    push = "\${{ inputs.push }}";
+                    profile = "\${{ matrix.name }}";
+                  }
+                  // optionalAttrs (cfg.settings.integration != {}) cfg.settings.integration;
               }
             ];
           };
