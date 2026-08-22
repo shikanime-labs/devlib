@@ -55,8 +55,6 @@ in
           ];
           includes = [
             "*.json"
-            "*.yaml"
-            "*.yml"
           ];
         };
 
