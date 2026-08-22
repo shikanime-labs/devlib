@@ -51,11 +51,6 @@ jobs:
             }}
       - id: direnv
         uses: shikanime-studio/actions/direnv@v9
-      - name: Apply direnv environment
-        env:
-          DIRENV_ENV: ${{ steps.direnv.outputs.env }}
-        run: |
-          echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
 
       - name: Run flake check
         run: nix flake check --accept-flake-config --no-pure-eval --system "${{ matrix.system }}"
@@ -95,11 +90,6 @@ jobs:
             }}
       - id: direnv
         uses: shikanime-studio/actions/direnv@v9
-      - name: Apply direnv environment
-        env:
-          DIRENV_ENV: ${{ steps.direnv.outputs.env }}
-        run: |
-          echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
 
       - uses: shikanime-studio/actions/nix/integration@v9
         with:
