@@ -92,17 +92,7 @@ in {
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
-              (
-                {
-                  name = "Apply direnv environment";
-                  env = {
-                    DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
-                  };
-                  run = ''
-                    echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
-                  '';
-                }
-              )
+              (              )
               (
                 {
                   uses = "shikanime-labs/actions/pnpm/integration@v9";
@@ -150,22 +140,7 @@ in {
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
-              )
-              {
-                name = "Apply direnv environment";
-                env = {
-                  DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
-                };
-                run = ''
-                  echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
-                '';
-              {
-                uses = "shikanime-labs/actions/pnpm/integration@v9";
-                "with" =
-                  {
-                    recursive = true;
-                  }
-                  // cfg.settings.integration;
+              )                  // cfg.settings.integration;
               }
             ];
           };
