@@ -35,7 +35,7 @@ Add devlib to your flake and import one or more `devenv` profiles.
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devlib = {
-      url = "github:shikanime-studio/devlib";
+      url = "github:shikanime-labs/devlib";
       inputs = {
         devenv.follows = "devenv";
         flake-parts.follows = "flake-parts";
@@ -145,7 +145,7 @@ Example:
 {
   inputs = {
     devenv.url = "github:cachix/devenv";
-    devlib.url = "github:shikanime-studio/devlib";
+    devlib.url = "github:shikanime-labs/devlib";
     flake-parts.url = "github:hercules-ci/flake-parts";
     git-hooks.url = "github:cachix/git-hooks.nix";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -201,6 +201,6 @@ Use Home Manager modules from `homeModules.<name>`.
 ## Templates
 
 - Initialize a project:
-  `nix flake init -t github:shikanime-studio/devlib#default`
+  `nix flake init -t github:shikanime-labs/devlib#default`
 - Use a minimal remote direnv setup:
-  `nix flake init -t github:shikanime-studio/devlib#remote`
+  `nix flake init -t github:shikanime-labs/devlib#remote`

@@ -52,14 +52,14 @@ in
             // cfg.settings.create-github-app-token;
           }
           {
-            uses = "shikanime-studio/actions/nix/setup@v9";
+            uses = "shikanime-labs/actions/nix/setup@v9";
             "with" = {
               github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
             }
             // cfg.settings.setup-nix;
           }
           {
-            uses = "shikanime-studio/actions/cleanup@v9";
+            uses = "shikanime-labs/actions/cleanup@v9";
             "with" = {
               github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               pull-request-url = "\${{ github.event.pull_request.html_url }}";

@@ -77,14 +77,14 @@ in
               // cfg.settings.create-github-app-token;
             }
             {
-              uses = "shikanime-studio/actions/nix/setup@v9";
+              uses = "shikanime-labs/actions/nix/setup@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }
               // cfg.settings.setup-nix;
             }
             {
-              uses = "shikanime-studio/actions/command/backport@v9";
+              uses = "shikanime-labs/actions/command/backport@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
                 gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
@@ -112,14 +112,14 @@ in
               // cfg.settings.create-github-app-token;
             }
             {
-              uses = "shikanime-studio/actions/nix/setup@v9";
+              uses = "shikanime-labs/actions/nix/setup@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }
               // cfg.settings.setup-nix;
             }
             {
-              uses = "shikanime-studio/actions/command/close@v9";
+              uses = "shikanime-labs/actions/command/close@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
                 username = "yorha-automata";
@@ -148,14 +148,14 @@ in
               // cfg.settings.create-github-app-token;
             }
             {
-              uses = "shikanime-studio/actions/nix/setup@v9";
+              uses = "shikanime-labs/actions/nix/setup@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }
               // cfg.settings.setup-nix;
             }
             {
-              uses = "shikanime-studio/actions/command/land@v9";
+              uses = "shikanime-labs/actions/command/land@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
                 email = "automata@shikanime.studio";
@@ -187,14 +187,14 @@ in
               // cfg.settings.create-github-app-token;
             }
             {
-              uses = "shikanime-studio/actions/nix/setup@v9";
+              uses = "shikanime-labs/actions/nix/setup@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }
               // cfg.settings.setup-nix;
             }
             {
-              uses = "shikanime-studio/actions/command/rebase@v9";
+              uses = "shikanime-labs/actions/command/rebase@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
                 email = "automata@shikanime.studio";
@@ -225,14 +225,14 @@ in
               // cfg.settings.create-github-app-token;
             }
             {
-              uses = "shikanime-studio/actions/nix/setup@v9";
+              uses = "shikanime-labs/actions/nix/setup@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }
               // cfg.settings.setup-nix;
             }
             {
-              uses = "shikanime-studio/actions/command/run@v9";
+              uses = "shikanime-labs/actions/command/run@v9";
               "with" = {
                 github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               }

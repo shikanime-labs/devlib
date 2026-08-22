@@ -6,7 +6,7 @@
     };
 
     devlib = {
-      url = "github:shikanime-studio/devlib";
+      url = "github:shikanime-labs/devlib";
       inputs = {
         devenv.follows = "devenv";
         flake-parts.follows = "flake-parts";

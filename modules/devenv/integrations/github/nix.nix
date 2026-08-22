@@ -97,7 +97,7 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
@@ -106,7 +106,7 @@ in
                 // cfg.settings.setup-nix;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -115,7 +115,7 @@ in
               (
                 {
                   id = "direnv";
-                  uses = "shikanime-studio/actions/direnv@v9";
+                  uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
@@ -153,7 +153,7 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
@@ -162,7 +162,7 @@ in
                 // cfg.settings.setup-nix;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -171,13 +171,13 @@ in
               (
                 {
                   id = "direnv";
-                  uses = "shikanime-studio/actions/direnv@v9";
+                  uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               {
                 env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
-                uses = "shikanime-studio/actions/nix/integration@v9";
+                uses = "shikanime-labs/actions/nix/integration@v9";
                 "with" = {
                   name = "\${{ matrix.name }}";
                   system = "\${{ matrix.system }}";
@@ -206,14 +206,14 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   github-token = githubToken;
                 }
                 // cfg.settings.setup-nix;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -222,7 +222,7 @@ in
               (
                 {
                   id = "setup-checks-jobs";
-                  uses = "shikanime-studio/actions/nix/setup-checks-jobs@v9";
+                  uses = "shikanime-labs/actions/nix/setup-checks-jobs@v9";
                 }
                 // optionalAttrs (cfg.settings.setup-checks-jobs != { }) {
                   "with" = cfg.settings.setup-checks-jobs;
@@ -252,14 +252,14 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   github-token = githubToken;
                 }
                 // cfg.settings.setup-nix;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -268,7 +268,7 @@ in
               (
                 {
                   id = "setup-packages-jobs";
-                  uses = "shikanime-studio/actions/nix/setup-packages-jobs@v9";
+                  uses = "shikanime-labs/actions/nix/setup-packages-jobs@v9";
                 }
                 // optionalAttrs (cfg.settings.setup-packages-jobs != { }) {
                   "with" = cfg.settings.setup-packages-jobs;

@@ -91,14 +91,14 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
                 // cfg.settings.checkout;
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -107,7 +107,7 @@ in
               (
                 {
                   id = "setup-profiles-jobs";
-                  uses = "shikanime-studio/actions/skaffold/setup-profiles-jobs@v9";
+                  uses = "shikanime-labs/actions/skaffold/setup-profiles-jobs@v9";
                 }
                 // optionalAttrs (cfg.settings.setup-profiles-jobs != { }) {
                   "with" = cfg.settings.setup-profiles-jobs;
@@ -136,7 +136,7 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -151,7 +151,7 @@ in
                 };
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -160,14 +160,14 @@ in
               (
                 {
                   id = "direnv";
-                  uses = "shikanime-studio/actions/direnv@v9";
+                  uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               (
                 {
                   id = "skaffold";
-                  uses = "shikanime-studio/actions/skaffold/integration@v9";
+                  uses = "shikanime-labs/actions/skaffold/integration@v9";
                   env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                   "with".push = "\${{ inputs.push }}";
                 }
@@ -222,7 +222,7 @@ in
                 // cfg.settings.create-github-app-token;
               }
               {
-                uses = "shikanime-studio/actions/checkout@v9";
+                uses = "shikanime-labs/actions/checkout@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -237,7 +237,7 @@ in
                 };
               }
               {
-                uses = "shikanime-studio/actions/nix/setup@v9";
+                uses = "shikanime-labs/actions/nix/setup@v9";
                 "with" = {
                   github-token = githubToken;
                 }
@@ -246,13 +246,13 @@ in
               (
                 {
                   id = "direnv";
-                  uses = "shikanime-studio/actions/direnv@v9";
+                  uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
               {
                 env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
-                uses = "shikanime-studio/actions/skaffold/integration@v9";
+                uses = "shikanime-labs/actions/skaffold/integration@v9";
                 "with" = {
                   push = "\${{ inputs.push }}";
                   profile = "\${{ matrix.name }}";

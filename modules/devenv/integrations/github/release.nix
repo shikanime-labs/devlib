@@ -51,20 +51,20 @@ in
             // cfg.settings.create-github-app-token;
           }
           {
-            uses = "shikanime-studio/actions/nix/setup@v9";
+            uses = "shikanime-labs/actions/nix/setup@v9";
             "with" = {
               github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
             };
           }
           {
-            uses = "shikanime-studio/actions/checkout@v9";
+            uses = "shikanime-labs/actions/checkout@v9";
             "with" = {
               github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
             }
             // cfg.settings.checkout;
           }
           {
-            uses = "shikanime-studio/actions/release@v9";
+            uses = "shikanime-labs/actions/release@v9";
             "with" = {
               github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
               ref = "\${{ github.ref_name || github.event.inputs.ref_name }}";
