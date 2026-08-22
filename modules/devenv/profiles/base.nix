@@ -43,33 +43,12 @@ in {
         xmllint.enable = true;
       };
       settings = {
-        formatter."dyff-json" = {
-          command = getExe pkgs.dyff;
-          options = [
-            "json"
-            "--restructure"
-            "--in-place"
-          ];
-          includes = [
-            "*.json"
-            "*.yaml"
-            "*.yml"
-          ];
-        };
-
-        formatter."dyff-yaml" = {
-          command = getExe pkgs.dyff;
-          options = [
-            "yaml"
-            "--restructure"
-            "--in-place"
-          ];
-          includes = [
-            "*.yaml"
-            "*.yml"
-          ];
-        };
-
+        # NOTE: the dyff `--restructure` formatters were removed from this
+        # treefmt config. `dyff --restructure` rewrites YAML by
+        # reordering/restructuring keys, which wraps GitHub Actions `${{ }}`
+        # expressions into invalid multi-line YAML and dirties the tree,
+        # failing the `git-hooks:run` CI step on `main`. The repo's YAML is
+        # prettier-formatted; dyff restructure is unsafe for Actions files.
         formatter.oxfmt = {
           includes = [
             "*.toml"
