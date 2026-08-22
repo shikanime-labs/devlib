@@ -79,13 +79,12 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
@@ -127,13 +126,12 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
@@ -216,13 +214,12 @@ in {
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" =
-                  {
-                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                    permission-contents = "read";
-                  }
-                  // cfg.settings.create-github-app-token;
+                "with" = {
+                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "read";
+                }
+                // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";

@@ -50,15 +50,14 @@ in {
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" =
-                {
-                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "write";
-                  permission-pull-requests = "write";
-                  permission-workflows = "write";
-                }
-                // cfg.settings.create-github-app-token;
+              "with" = {
+                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                permission-contents = "write";
+                permission-pull-requests = "write";
+                permission-workflows = "write";
+              }
+              // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
@@ -97,14 +96,13 @@ in {
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" =
-                {
-                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-issues = "write";
-                  permission-pull-requests = "write";
-                }
-                // cfg.settings.create-github-app-token;
+              "with" = {
+                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
+                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                permission-issues = "write";
+                permission-pull-requests = "write";
+              }
+              // cfg.settings.create-github-app-token;
             }
             {
               uses = "actions/stale@v10";
