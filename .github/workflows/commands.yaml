@@ -20,10 +20,10 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/command/backport@v9
+      - uses: shikanime-labs/actions/command/backport@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
@@ -42,10 +42,10 @@ jobs:
           permission-issues: write
           permission-pull-requests: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/command/close@v9
+      - uses: shikanime-labs/actions/command/close@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           username: yorha-automata
@@ -65,10 +65,10 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/command/land@v9
+      - uses: shikanime-labs/actions/command/land@v9
         with:
           email: automata@shikanime.studio
           fullname: Automata
@@ -91,10 +91,10 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/command/rebase@v9
+      - uses: shikanime-labs/actions/command/rebase@v9
         with:
           email: automata@shikanime.studio
           fullname: Automata
@@ -116,9 +116,9 @@ jobs:
           permission-issues: write
           permission-pull-requests: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/command/run@v9
+      - uses: shikanime-labs/actions/command/run@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
