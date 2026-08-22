@@ -92,7 +92,6 @@ in {
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
-              (              )
               (
                 {
                   uses = "shikanime-labs/actions/pnpm/integration@v9";
@@ -140,7 +139,14 @@ in {
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
-              )                  // cfg.settings.integration;
+              )
+              {
+                uses = "shikanime-labs/actions/pnpm/integration@v9";
+                "with" =
+                  {
+                    recursive = true;
+                  }
+                  // cfg.settings.integration;
               }
             ];
           };
