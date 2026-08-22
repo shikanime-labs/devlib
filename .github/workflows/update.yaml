@@ -17,17 +17,17 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-studio/actions/nix/setup@v9
+      - uses: shikanime-labs/actions/nix/setup@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-studio/actions/checkout@v9
+      - uses: shikanime-labs/actions/checkout@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           sign-commits: true
           username: yorha-automata
-      - uses: shikanime-studio/actions/update@v9
+      - uses: shikanime-labs/actions/update@v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           username: yorha-automata
