@@ -7,8 +7,7 @@ permissions:
       - created
 jobs:
   backport:
-    if:
-      github.event.issue.pull_request != null &&
+    if: github.event.issue.pull_request != null &&
       contains(github.event.comment.body, '.backport')
     runs-on: ubuntu-slim
     steps:
@@ -31,8 +30,7 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           sign-commits: true
   close:
-    if:
-      github.event.issue.pull_request != null &&
+    if: github.event.issue.pull_request != null &&
       contains(github.event.comment.body, '.close')
     runs-on: ubuntu-slim
     steps:
@@ -52,8 +50,7 @@ jobs:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           username: yorha-automata
   land:
-    if:
-      github.event.issue.pull_request != null &&
+    if: github.event.issue.pull_request != null &&
       (contains(github.event.comment.body, '.land') ||
       contains(github.event.comment.body, '.force-land'))
     runs-on: ubuntu-slim
@@ -81,8 +78,7 @@ jobs:
           sign-commits: true
           username: yorha-automata
   rebase:
-    if:
-      github.event.issue.pull_request != null &&
+    if: github.event.issue.pull_request != null &&
       contains(github.event.comment.body, '.rebase')
     runs-on: ubuntu-slim
     steps:
@@ -108,8 +104,7 @@ jobs:
           sign-commits: true
           username: yorha-automata
   run:
-    if:
-      github.event.issue.pull_request != null &&
+    if: github.event.issue.pull_request != null &&
       contains(github.event.comment.body, '.run')
     runs-on: ubuntu-slim
     steps:

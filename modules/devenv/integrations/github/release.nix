@@ -4,27 +4,23 @@
   pkgs,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.github.workflows.release;
 
-  yamlFormat = pkgs.formats.yaml { };
-in
-{
+  yamlFormat = pkgs.formats.yaml {};
+in {
   options.github.workflows.release = {
     enable = mkEnableOption "release";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for checkout";
       };
       create-github-app-token = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for create-github-app-token";
       };
     };
@@ -33,8 +29,7 @@ in
   config = mkIf cfg.enable {
     github.settings.workflows.release = {
       jobs.release = {
-        "if" =
-          "(startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.ref_name, 'v'))";
+        "if" = "(startsWith(github.ref, 'refs/tags/v')) || (github.event_name == 'workflow_dispatch' && startsWith(github.event.inputs.ref_name, 'v'))";
         runs-on = "ubuntu-slim";
         permissions.contents = "write";
         steps = [
@@ -42,13 +37,14 @@ in
             continue-on-error = true;
             id = "createGithubAppToken";
             uses = "actions/create-github-app-token@v3";
-            "with" = {
-              app-id = "\${{ vars.OPERATOR_APP_ID }}";
-              permission-contents = "write";
-              permission-workflows = "write";
-              private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-            }
-            // cfg.settings.create-github-app-token;
+            "with" =
+              {
+                app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                permission-contents = "write";
+                permission-workflows = "write";
+                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+              }
+              // cfg.settings.create-github-app-token;
           }
           {
             uses = "shikanime-labs/actions/nix/setup@v9";
@@ -58,10 +54,11 @@ in
           }
           {
             uses = "shikanime-labs/actions/checkout@v9";
-            "with" = {
-              github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-            }
-            // cfg.settings.checkout;
+            "with" =
+              {
+                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+              }
+              // cfg.settings.checkout;
           }
           {
             uses = "shikanime-labs/actions/release@v9";
@@ -80,7 +77,7 @@ in
             "main"
             "release-[0-9]+.[0-9]+"
           ];
-          tags = [ "v?[0-9]+.[0-9]+.[0-9]+*" ];
+          tags = ["v?[0-9]+.[0-9]+.[0-9]+*"];
         };
         workflow_dispatch.inputs.ref_name = {
           description = "Tag or branch to release";

@@ -2,21 +2,16 @@
   config,
   pkgs,
   ...
-}:
-
-let
+}: let
   cacheDir =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      "${config.home.homeDirectory}/Library/Caches/npm"
-    else
-      "${config.xdg.cacheHome}/npm";
+    if pkgs.stdenv.hostPlatform.isDarwin
+    then "${config.home.homeDirectory}/Library/Caches/npm"
+    else "${config.xdg.cacheHome}/npm";
   configDir =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      "${config.home.homeDirectory}/Library/Application Support/npm"
-    else
-      "${config.xdg.configHome}/npm";
-in
-{
+    if pkgs.stdenv.hostPlatform.isDarwin
+    then "${config.home.homeDirectory}/Library/Application Support/npm"
+    else "${config.xdg.configHome}/npm";
+in {
   home.packages = [
     pkgs.typescript-language-server
     pkgs.nodejs
@@ -32,5 +27,4 @@ in
     source ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/auto-generate/completions/node.nu
     source ${pkgs.nu_scripts}/share/nu_scripts/custom-completions/auto-generate/completions/npm.nu
   '';
-
 }

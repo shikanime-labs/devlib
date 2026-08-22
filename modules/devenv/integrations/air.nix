@@ -4,32 +4,28 @@
   config,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.air;
 
-  settingsFormat = pkgs.formats.toml { };
+  settingsFormat = pkgs.formats.toml {};
 
   configFile = settingsFormat.generate "air.toml" cfg.settings;
 
-  addFlagsConfigArg = lib.optionalString (cfg.settings != { }) ''
+  addFlagsConfigArg = lib.optionalString (cfg.settings != {}) ''
     --add-flags "-c ${configFile}"
   '';
 
   wrapped =
     pkgs.runCommand "air-wrapped"
-      {
-        buildInputs = [ pkgs.makeWrapper ];
-        meta.mainProgram = "air";
-      }
-      ''
-        makeWrapper ${cfg.package}/bin/air $out/bin/air \
-          ${addFlagsConfigArg}
-      '';
-in
-{
+    {
+      buildInputs = [pkgs.makeWrapper];
+      meta.mainProgram = "air";
+    }
+    ''
+      makeWrapper ${cfg.package}/bin/air $out/bin/air \
+        ${addFlagsConfigArg}
+    '';
+in {
   options.air = {
     enable = mkEnableOption "Air live reload for Go applications";
 
@@ -58,7 +54,7 @@ in
         };
       };
 
-      default = { };
+      default = {};
 
       description = ''
         Air configuration settings.
@@ -91,6 +87,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    packages = [ wrapped ];
+    packages = [wrapped];
   };
 }

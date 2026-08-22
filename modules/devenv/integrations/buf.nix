@@ -4,20 +4,16 @@
   config,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.buf;
 
-  yamlFormat = pkgs.formats.yaml { };
+  yamlFormat = pkgs.formats.yaml {};
 
-  resolvePlugin =
-    pluginCfg:
-    if pluginCfg ? package then
-      let
-        exe = getExe pluginCfg.package;
-      in
+  resolvePlugin = pluginCfg:
+    if pluginCfg ? package
+    then let
+      exe = getExe pluginCfg.package;
+    in
       (removeAttrs pluginCfg [
         "package"
         "plugin"
@@ -26,29 +22,26 @@ let
       // {
         local = exe;
       }
-    else
-      pluginCfg;
+    else pluginCfg;
 
   template =
-    if cfg.template ? plugins then
-      cfg.template // { plugins = map resolvePlugin cfg.template.plugins; }
-    else
-      cfg.template;
+    if cfg.template ? plugins
+    then cfg.template // {plugins = map resolvePlugin cfg.template.plugins;}
+    else cfg.template;
 
   templateConfigFile = yamlFormat.generate "buf.gen.yaml" template;
 
   package =
     pkgs.runCommand "buf-wrapped"
-      {
-        buildInputs = [ pkgs.makeWrapper ];
-        meta.mainProgram = "buf";
-      }
-      ''
-        makeWrapper ${cfg.package}/bin/buf $out/bin/buf \
-          --add-flags "--template ${templateConfigFile}"
-      '';
-in
-{
+    {
+      buildInputs = [pkgs.makeWrapper];
+      meta.mainProgram = "buf";
+    }
+    ''
+      makeWrapper ${cfg.package}/bin/buf $out/bin/buf \
+        --add-flags "--template ${templateConfigFile}"
+    '';
+in {
   options.buf = {
     enable = mkEnableOption "Buf configuration generator";
 
@@ -64,7 +57,7 @@ in
       };
       default = {
         version = "v2";
-        plugins = [ ];
+        plugins = [];
       };
       description = "Contents of buf.gen.yaml";
       example = literalExpression ''
@@ -89,10 +82,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    packages = [ cfg.package ];
+    packages = [cfg.package];
 
     tasks."devlib:buf:generate" = {
-      before = [ "devenv:enterShell" ] ++ optional config.treefmt.enable "devenv:treefmt:run";
+      before = ["devenv:enterShell"] ++ optional config.treefmt.enable "devenv:treefmt:run";
       description = "Run buf generate with buf.gen.yaml";
       exec = ''
         ${getExe package} generate

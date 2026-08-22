@@ -4,13 +4,9 @@
   pkgs,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.ghstack;
-in
-{
+in {
   options.ghstack = {
     enable = mkEnableOption "ghstack";
 
@@ -22,22 +18,20 @@ in
   };
 
   config = mkIf cfg.enable {
-    packages = [ cfg.package ];
+    packages = [cfg.package];
 
     tasks."devlib:ghstack:hooks:install" = {
-      before = [ "devenv:enterShell" ];
+      before = ["devenv:enterShell"];
       description = "Install ghstack pre-ghstack hook";
-      exec =
-        let
-          hookScript = pkgs.writeScript "pre-ghstack" ''
-            #!${pkgs.bashNonInteractive}/bin/bash
+      exec = let
+        hookScript = pkgs.writeScript "pre-ghstack" ''
+          #!${pkgs.bashNonInteractive}/bin/bash
 
-            ${getExe config.git-hooks.package} run --from-ref "$1" --to-ref "$2"
-          '';
-        in
-        ''
-          install -D -m 0755 ${hookScript} .git/hooks/pre-ghstack
+          ${getExe config.git-hooks.package} run --from-ref "$1" --to-ref "$2"
         '';
+      in ''
+        install -D -m 0755 ${hookScript} .git/hooks/pre-ghstack
+      '';
     };
   };
 }

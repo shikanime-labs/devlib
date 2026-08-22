@@ -2,10 +2,8 @@
   config,
   pkgs,
   ...
-}:
-
-{
-  imports = [ ./base.nix ];
+}: {
+  imports = [./base.nix];
 
   env = {
     SKAFFOLD_CACHE_FILE = config.env.DEVENV_STATE + "/skaffold/cache";
@@ -14,5 +12,5 @@
 
   github.workflows.skaffold.enable = true;
 
-  packages = [ pkgs.skaffold ];
+  packages = [pkgs.skaffold];
 }

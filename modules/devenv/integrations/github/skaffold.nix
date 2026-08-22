@@ -4,49 +4,45 @@
   pkgs,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.github.workflows.skaffold;
 
-  yamlFormat = pkgs.formats.yaml { };
+  yamlFormat = pkgs.formats.yaml {};
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
-in
-{
+in {
   options.github.workflows.skaffold = {
     enable = mkEnableOption "skaffold";
 
     settings = {
       checkout = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for checkout";
       };
       create-github-app-token = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for create-github-app-token";
       };
       direnv = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for direnv";
       };
       setup-nix = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for setup-nix";
       };
       setup-profiles-jobs = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for setup-profiles-jobs";
       };
       integration = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for skaffold integration";
       };
     };
@@ -65,7 +61,7 @@ in
               description = "Whether to push images during build";
             };
           };
-          workflow_dispatch = { };
+          workflow_dispatch = {};
         };
 
         permissions.contents = "read";
@@ -83,33 +79,36 @@ in
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" = {
-                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "read";
-                }
-                // cfg.settings.create-github-app-token;
+                "with" =
+                  {
+                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                    permission-contents = "read";
+                  }
+                  // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.checkout;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.checkout;
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.setup-nix;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.setup-nix;
               }
               (
                 {
                   id = "setup-profiles-jobs";
                   uses = "shikanime-labs/actions/skaffold/setup-profiles-jobs@v9";
                 }
-                // optionalAttrs (cfg.settings.setup-profiles-jobs != { }) {
+                // optionalAttrs (cfg.settings.setup-profiles-jobs != {}) {
                   "with" = cfg.settings.setup-profiles-jobs;
                 }
               )
@@ -128,19 +127,21 @@ in
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" = {
-                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "read";
-                }
-                // cfg.settings.create-github-app-token;
+                "with" =
+                  {
+                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                    permission-contents = "read";
+                  }
+                  // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.checkout;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.checkout;
               }
               {
                 uses = "docker/login-action@v4";
@@ -152,17 +153,18 @@ in
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.setup-nix;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.setup-nix;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
+                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
               (
                 {
@@ -171,7 +173,7 @@ in
                   env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                   "with".push = "\${{ inputs.push }}";
                 }
-                // optionalAttrs (cfg.settings.integration != { }) {
+                // optionalAttrs (cfg.settings.integration != {}) {
                   "with" = cfg.settings.integration;
                 }
               )
@@ -198,7 +200,7 @@ in
 
           build-render-profile = {
             name = "Build & Render (Profile)";
-            needs = [ "setup-profiles-jobs" ];
+            needs = ["setup-profiles-jobs"];
             "if" = "\${{ needs['setup-profiles-jobs'].outputs.continue == 'true' }}";
             runs-on = "ubuntu-latest";
             permissions = {
@@ -214,19 +216,21 @@ in
                 continue-on-error = true;
                 id = "createGithubAppToken";
                 uses = "actions/create-github-app-token@v3";
-                "with" = {
-                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "read";
-                }
-                // cfg.settings.create-github-app-token;
+                "with" =
+                  {
+                    app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                    private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                    permission-contents = "read";
+                  }
+                  // cfg.settings.create-github-app-token;
               }
               {
                 uses = "shikanime-labs/actions/checkout@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.checkout;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.checkout;
               }
               {
                 uses = "docker/login-action@v4";
@@ -238,26 +242,28 @@ in
               }
               {
                 uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.setup-nix;
+                "with" =
+                  {
+                    github-token = githubToken;
+                  }
+                  // cfg.settings.setup-nix;
               }
               (
                 {
                   id = "direnv";
                   uses = "shikanime-labs/actions/direnv@v9";
                 }
-                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
+                // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
               {
                 env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                 uses = "shikanime-labs/actions/skaffold/integration@v9";
-                "with" = {
-                  push = "\${{ inputs.push }}";
-                  profile = "\${{ matrix.name }}";
-                }
-                // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
+                "with" =
+                  {
+                    push = "\${{ inputs.push }}";
+                    profile = "\${{ matrix.name }}";
+                  }
+                  // optionalAttrs (cfg.settings.integration != {}) cfg.settings.integration;
               }
             ];
           };
@@ -269,8 +275,7 @@ in
       github.settings.workflows.integration = {
         jobs = {
           skaffold = {
-            "if" =
-              "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || (github.event.pull_request.draft == false && github.event.pull_request.head.repo.fork == false) }}";
+            "if" = "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || (github.event.pull_request.draft == false && github.event.pull_request.head.repo.fork == false) }}";
             uses = "./.github/workflows/skaffold.yaml";
             permissions = {
               contents = "read";
@@ -295,7 +300,7 @@ in
             secrets.OPERATOR_PRIVATE_KEY = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
           };
 
-          release.needs = [ "skaffold" ];
+          release.needs = ["skaffold"];
         };
         on.workflow_call.secrets.OPERATOR_PRIVATE_KEY.required = mkDefault true;
       };

@@ -52,8 +52,7 @@ jobs:
       - id: direnv
         uses: shikanime-studio/actions/direnv@v9
       - env: ${{ fromJSON(steps.direnv.outputs.env) }}
-        run:
-          nix flake check --accept-flake-config --no-pure-eval --system "${{
+        run: nix flake check --accept-flake-config --no-pure-eval --system "${{
           matrix.system }}"
         shell: bash
   packages:

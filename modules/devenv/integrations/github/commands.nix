@@ -4,52 +4,48 @@
   pkgs,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.github.workflows.commands;
 
-  yamlFormat = pkgs.formats.yaml { };
-in
-{
+  yamlFormat = pkgs.formats.yaml {};
+in {
   options.github.workflows.commands = {
     enable = mkEnableOption "commands workflow";
 
     settings = {
       backport = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for backport";
       };
       close = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for close";
       };
       create-github-app-token = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for create-github-app-token";
       };
       land = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for land";
       };
       rebase = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for rebase";
       };
       run = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for run";
       };
       setup-nix = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
+        type = types.submodule {freeformType = yamlFormat.type;};
+        default = {};
         description = "Overrides for setup-nix";
       };
     };
@@ -59,39 +55,41 @@ in
     github.settings.workflows.commands = {
       jobs = {
         backport = {
-          "if" =
-            "github.event.issue.pull_request != null && contains(github.event.comment.body, '.backport')";
+          "if" = "github.event.issue.pull_request != null && contains(github.event.comment.body, '.backport')";
           runs-on = "ubuntu-slim";
           steps = [
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" = {
-                app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-                permission-workflows = "write";
-              }
-              // cfg.settings.create-github-app-token;
+              "with" =
+                {
+                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "write";
+                  permission-issues = "write";
+                  permission-pull-requests = "write";
+                  permission-workflows = "write";
+                }
+                // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/command/backport@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                sign-commits = true;
-              }
-              // cfg.settings.backport;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                  gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
+                  gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
+                  sign-commits = true;
+                }
+                // cfg.settings.backport;
             }
           ];
         };
@@ -102,70 +100,75 @@ in
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" = {
-                app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-              }
-              // cfg.settings.create-github-app-token;
+              "with" =
+                {
+                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "write";
+                  permission-issues = "write";
+                  permission-pull-requests = "write";
+                }
+                // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/command/close@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                username = "yorha-automata";
-              }
-              // cfg.settings.close;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                  username = "yorha-automata";
+                }
+                // cfg.settings.close;
             }
           ];
         };
         land = {
-          "if" =
-            "github.event.issue.pull_request != null && (contains(github.event.comment.body, '.land') || contains(github.event.comment.body, '.force-land'))";
+          "if" = "github.event.issue.pull_request != null && (contains(github.event.comment.body, '.land') || contains(github.event.comment.body, '.force-land'))";
           runs-on = "ubuntu-slim";
           steps = [
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" = {
-                app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-administration = "read";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-                permission-workflows = "write";
-              }
-              // cfg.settings.create-github-app-token;
+              "with" =
+                {
+                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-administration = "read";
+                  permission-contents = "write";
+                  permission-issues = "write";
+                  permission-pull-requests = "write";
+                  permission-workflows = "write";
+                }
+                // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/command/land@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                email = "automata@shikanime.studio";
-                fullname = "Automata";
-                username = "yorha-automata";
-                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                sign-commits = true;
-              }
-              // cfg.settings.land;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                  email = "automata@shikanime.studio";
+                  fullname = "Automata";
+                  username = "yorha-automata";
+                  gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
+                  gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
+                  sign-commits = true;
+                }
+                // cfg.settings.land;
             }
           ];
         };
@@ -176,35 +179,38 @@ in
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" = {
-                app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-                permission-workflows = "write";
-              }
-              // cfg.settings.create-github-app-token;
+              "with" =
+                {
+                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "write";
+                  permission-issues = "write";
+                  permission-pull-requests = "write";
+                  permission-workflows = "write";
+                }
+                // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/command/rebase@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                email = "automata@shikanime.studio";
-                fullname = "Automata";
-                username = "yorha-automata";
-                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                sign-commits = true;
-              }
-              // cfg.settings.rebase;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                  email = "automata@shikanime.studio";
+                  fullname = "Automata";
+                  username = "yorha-automata";
+                  gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
+                  gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
+                  sign-commits = true;
+                }
+                // cfg.settings.rebase;
             }
           ];
         };
@@ -215,34 +221,37 @@ in
             {
               id = "createGithubAppToken";
               uses = "actions/create-github-app-token@v3";
-              "with" = {
-                app-id = "\${{ vars.OPERATOR_APP_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-              }
-              // cfg.settings.create-github-app-token;
+              "with" =
+                {
+                  app-id = "\${{ vars.OPERATOR_APP_ID }}";
+                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
+                  permission-contents = "write";
+                  permission-issues = "write";
+                  permission-pull-requests = "write";
+                }
+                // cfg.settings.create-github-app-token;
             }
             {
               uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.setup-nix;
             }
             {
               uses = "shikanime-labs/actions/command/run@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.run;
+              "with" =
+                {
+                  github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
+                }
+                // cfg.settings.run;
             }
           ];
         };
       };
       name = "Commands";
-      on.issue_comment.types = [ "created" ];
+      on.issue_comment.types = ["created"];
       permissions.contents = "read";
     };
   };

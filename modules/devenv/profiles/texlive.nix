@@ -1,7 +1,5 @@
-{ pkgs, ... }:
-
-{
-  imports = [ ./base.nix ];
+{pkgs, ...}: {
+  imports = [./base.nix];
 
   git-hooks.hooks.chktex.enable = true;
 

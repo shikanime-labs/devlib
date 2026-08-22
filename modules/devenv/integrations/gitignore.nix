@@ -4,10 +4,7 @@
   pkgs,
   ...
 }:
-
-with lib;
-
-let
+with lib; let
   cfg = config.gitignore;
 
   templates =
@@ -27,11 +24,10 @@ let
     ###-------------------###
   '';
 
-  content = concatStringsSep "\n" (optional (cfg.content != [ ]) contentHeader ++ cfg.content);
+  content = concatStringsSep "\n" (optional (cfg.content != []) contentHeader ++ cfg.content);
 
   contentFile = pkgs.writeText "devlib-gitignore-content" content;
-in
-{
+in {
   options.gitignore = {
     enable = mkEnableOption "gitignore generator";
 
@@ -43,7 +39,7 @@ in
 
     content = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       example = [
         "*.log"
         "dist/"
@@ -54,13 +50,15 @@ in
       '';
     };
 
-    enableDefaultTemplates = mkEnableOption "default gitignore templates" // {
-      default = true;
-    };
+    enableDefaultTemplates =
+      mkEnableOption "default gitignore templates"
+      // {
+        default = true;
+      };
 
     templates = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       example = [
         "tt:linux"
         "tt:macos"
@@ -90,17 +88,17 @@ in
 
     tasks."devlib:gitignore:install" = {
       description = "Generate .gitignore file";
-      exec = optionalString (templates != [ ] || cfg.content != [ ]) ''
+      exec = optionalString (templates != [] || cfg.content != []) ''
         {
-          ${optionalString (templates != [ ]) ''
-            ${lib.getExe' pkgs.coreutils "printf"} '%s' "$(${getExe cfg.package} create ${concatStringsSep " " templates})"
-          ''}
+          ${optionalString (templates != []) ''
+          ${lib.getExe' pkgs.coreutils "printf"} '%s' "$(${getExe cfg.package} create ${concatStringsSep " " templates})"
+        ''}
           ${optionalString (
-            templates != [ ] && cfg.content != [ ]
-          ) "${lib.getExe' pkgs.coreutils "printf"} '\\n\\n'"}
-          ${optionalString (cfg.content != [ ]) ''
-            ${lib.getExe' pkgs.coreutils "cat"} ${contentFile}
-          ''}
+          templates != [] && cfg.content != []
+        ) "${lib.getExe' pkgs.coreutils "printf"} '\\n\\n'"}
+          ${optionalString (cfg.content != []) ''
+          ${lib.getExe' pkgs.coreutils "cat"} ${contentFile}
+        ''}
           ${lib.getExe' pkgs.coreutils "printf"} '\n'
         } \
           | ${lib.getExe' pkgs.moreutils "sponge"} "${config.env.DEVENV_ROOT}/.gitignore"

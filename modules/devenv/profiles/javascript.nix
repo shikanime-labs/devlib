@@ -1,11 +1,9 @@
-{ pkgs, ... }:
-
-{
-  imports = [ ./base.nix ];
+{pkgs, ...}: {
+  imports = [./base.nix];
 
   github.workflows.javascript.enable = true;
 
-  gitignore.templates = [ "tt:node" ];
+  gitignore.templates = ["tt:node"];
 
   renovate.settings.npm.enabled = true;
 
@@ -19,5 +17,5 @@
     };
   };
 
-  treefmt.config.settings.global.excludes = [ "node_modules/*" ];
+  treefmt.config.settings.global.excludes = ["node_modules/*"];
 }
