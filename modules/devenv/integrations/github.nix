@@ -74,8 +74,6 @@ in
   config = mkIf cfg.enable {
     packages = [ cfg.package ];
 
-    git-hooks.hooks.action-validator.enable = true;
-
     tasks."devlib:github:workflows:install" = {
       description = "Install GitHub Actions workflow files";
       exec = concatStringsSep "\n" (
