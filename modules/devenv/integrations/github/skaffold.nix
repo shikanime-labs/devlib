@@ -168,9 +168,19 @@ in {
               )
               (
                 {
+                  name = "Apply direnv environment";
+                  env = {
+                    DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
+                  };
+                  run = ''
+                    echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
+                  '';
+                }
+              )
+              (
+                {
                   id = "skaffold";
                   uses = "shikanime-labs/actions/skaffold/integration@v9";
-                  env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                   "with".push = "\${{ inputs.push }}";
                 }
                 // optionalAttrs (cfg.settings.integration != {}) {
@@ -256,7 +266,14 @@ in {
                 // optionalAttrs (cfg.settings.direnv != {}) {"with" = cfg.settings.direnv;}
               )
               {
-                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
+                name = "Apply direnv environment";
+                env = {
+                  DIRENV_ENV = "\${{ steps.direnv.outputs.env }}";
+                };
+                run = ''
+                  echo "$DIRENV_ENV" | python3 -c "import json, sys, os; d = json.load(sys.stdin); open(os.environ['GITHUB_ENV'], 'a').write("".join(f'{k}={v}\n' for k, v in d.items()))"
+                '';
+              {
                 uses = "shikanime-labs/actions/skaffold/integration@v9";
                 "with" =
                   {
