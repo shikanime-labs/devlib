@@ -6,7 +6,7 @@
   git-hooks.hooks.flake-checker.enable = true;
 
   gitignore.templates = [
-    "repo:shikanime-studio/gitignore/refs/heads/main/Devenv.gitignore"
+    "repo:shikanime-labs/gitignore/refs/heads/main/Devenv.gitignore"
   ];
 
   languages.nix.enable = true;
