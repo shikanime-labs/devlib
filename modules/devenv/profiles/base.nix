@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -97,4 +98,12 @@ in
       };
     };
   };
+
+  # Formatter rewrites and the pre-commit run mutate the working copy
+  # concurrently during cold shell entry, so pre-commit's dirty-tree check
+  # blames whichever hook reports first. Serialize formatters ahead of the
+  # hook runner to make the diff window deterministic.
+  tasks."devenv:git-hooks:run".after = mkIf (config.treefmt.enable && config.git-hooks.enable) [
+    "devenv:treefmt:run"
+  ];
 }
