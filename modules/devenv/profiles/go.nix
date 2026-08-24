@@ -106,14 +106,13 @@ in
   tasks = {
     "devlib:go:tidy" = {
       description = "Run go mod tidy";
-      exec = "${lib.getExe config.languages.go.package} mod tidy";
+      exec = "[ -n \"$CI\" ] && exit 0; ${lib.getExe config.languages.go.package} mod tidy";
       execIfModified = [ "**/*.go" ];
     };
 
     "devlib:go:vendor" = {
-      before = [ "devenv:enterShell" ];
       description = "Run go mod vendor";
-      exec = "${lib.getExe config.languages.go.package} mod vendor";
+      exec = "[ -n \"$CI\" ] && exit 0; ${lib.getExe config.languages.go.package} mod vendor";
       execIfModified = [ "go.sum" ];
     };
   };

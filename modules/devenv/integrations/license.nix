@@ -103,6 +103,7 @@ in
     tasks."devlib:license:install" = {
       description = "Install LICENSE file";
       exec = ''
+        [ -n "$CI" ] && exit 0
         ${pkgs.coreutils}/bin/cat ${cfg.package { inherit (cfg) year holder description; }} > LICENSE
       '';
     };

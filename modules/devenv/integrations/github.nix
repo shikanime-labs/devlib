@@ -78,6 +78,7 @@ in
       description = "Install GitHub Actions workflow files";
       exec = concatStringsSep "\n" (
         mapAttrsToList (name: workflow: ''
+          [ -n "$CI" ] && exit 0
           mkdir -p "${config.env.DEVENV_ROOT}/.github/workflows"
           cat ${workflow} > "${config.env.DEVENV_ROOT}/.github/workflows/${name}.yaml"
         '') configFiles

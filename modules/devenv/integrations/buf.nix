@@ -93,6 +93,7 @@ in
       before = [ "devenv:enterShell" ] ++ optional config.treefmt.enable "devenv:treefmt:run";
       description = "Run buf generate with buf.gen.yaml";
       exec = ''
+        [ -n "$CI" ] && exit 0
         ${getExe package} generate
       '';
     };

@@ -83,11 +83,13 @@ in
       exec =
         if config.github.enable then
           ''
+            [ -n "$CI" ] && exit 0
             mkdir -p "${config.env.DEVENV_ROOT}/.github"
             cat ${configFile} > "${config.env.DEVENV_ROOT}/.github/renovate.json"
           ''
         else
           ''
+            [ -n "$CI" ] && exit 0
             cat ${configFile} > "${config.env.DEVENV_ROOT}/renovate.json"
           '';
     };

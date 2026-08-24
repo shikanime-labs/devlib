@@ -89,6 +89,7 @@ in
     tasks."devlib:gitignore:install" = {
       description = "Generate .gitignore file";
       exec = optionalString (templates != [ ] || cfg.content != [ ]) ''
+        [ -n "$CI" ] && exit 0
         {
           ${optionalString (templates != [ ]) ''
             ${lib.getExe' pkgs.coreutils "printf"} '%s' "$(${getExe cfg.package} create ${concatStringsSep " " templates})"
