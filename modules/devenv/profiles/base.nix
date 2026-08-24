@@ -82,9 +82,9 @@ in
           ];
         };
         global.excludes = [
-          ".devenv/"
-          ".direnv/"
-          ".rumdl_cache/"
+          ".devenv/*"
+          ".direnv/*"
+          ".rumdl_cache/*"
           "*.assetsignore"
           "*.dockerignore"
           "*.gcloudignore"
