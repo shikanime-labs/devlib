@@ -47,30 +47,6 @@ in
         xmllint.enable = true;
       };
       settings = {
-        formatter."dyff-json" = {
-          command = getExe pkgs.dyff;
-          options = [
-            "json"
-            "--restructure"
-            "--in-place"
-          ];
-          includes = [
-            "*.json"
-          ];
-        };
-
-        formatter."dyff-yaml" = {
-          command = getExe pkgs.dyff;
-          options = [
-            "yaml"
-            "--restructure"
-            "--in-place"
-          ];
-          includes = [
-            "*.yaml"
-            "*.yml"
-          ];
-        };
 
         formatter.oxfmt = {
           includes = [
