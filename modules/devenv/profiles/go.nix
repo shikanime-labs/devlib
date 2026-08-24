@@ -111,7 +111,6 @@ in
     };
 
     "devlib:go:vendor" = {
-      before = [ "devenv:enterShell" ];
       description = "Run go mod vendor";
       exec = "${lib.getExe config.languages.go.package} mod vendor";
       execIfModified = [ "go.sum" ];

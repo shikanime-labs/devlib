@@ -23,7 +23,6 @@ in
     packages = [ cfg.package ];
 
     tasks."devlib:ghstack:hooks:install" = {
-      before = [ "devenv:enterShell" ];
       description = "Install ghstack pre-ghstack hook";
       exec =
         let
