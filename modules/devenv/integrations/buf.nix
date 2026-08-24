@@ -90,7 +90,6 @@ in
     packages = [ cfg.package ];
 
     tasks."devlib:buf:generate" = {
-      before = [ "devenv:enterShell" ] ++ optional config.treefmt.enable "devenv:treefmt:run";
       description = "Run buf generate with buf.gen.yaml";
       exec = ''
         ${getExe package} generate
