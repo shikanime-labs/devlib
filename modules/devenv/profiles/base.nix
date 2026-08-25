@@ -81,6 +81,21 @@ in
             (toString configFile)
           ];
         };
+        # rumdl-check lints every *.md in the tree by default. Agent working
+        # notes (.hermes/plans) and generated verification reports
+        # (docs/verification) are long-form prose that is not published
+        # documentation and fails strict MD013/MD018. Scope rumdl to real
+        # source docs so those auxiliary markdown don't break `nix flake
+        # check`.
+        formatter."rumdl-check" = {
+          includes = [
+            "*.md"
+          ];
+          excludes = [
+            ".hermes/**"
+            "docs/verification/**"
+          ];
+        };
         global.excludes = [
           ".devenv/*"
           ".direnv/*"
