@@ -10,7 +10,6 @@ let
 
   configFile = jsonFormat.generate ".oxfmtrc.json" {
     printWidth = 80;
-    proseWrap = "always";
   };
 in
 {
