@@ -4,7 +4,6 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.github;
   yamlFormat = pkgs.formats.yaml { };
@@ -12,19 +11,10 @@ let
   configFiles = mapAttrs (
     name: workflow: yamlFormat.generate "${name}.yaml" (removeAttrs workflow [ "actions" ])
   ) cfg.settings.workflows;
-
-  zizmorConfigFile = yamlFormat.generate "zizmor.yml" {
-    # TODO: Refactor file generation pipeline to avoid GitHub rate limit using
-    # zizmor with pinact
-    rules = {
-      artipacked.disable = true;
-      secrets-outside-env.disable = true;
-      unpinned-uses.disable = true;
-    };
-  };
 in
 {
   imports = [
+    ./github/pins.nix
     ./github/cleanup.nix
     ./github/commands.nix
     ./github/javascript.nix
@@ -83,24 +73,5 @@ in
         '') configFiles
       );
     };
-
-    treefmt.config.programs = {
-      zizmor = {
-        enable = true;
-        includes = [
-          ".github/workflows/*.yml"
-          ".github/workflows/*.yaml"
-          ".github/actions/**/*.yml"
-          ".github/actions/**/*.yaml"
-          "**/action.yml"
-          "**/action.yaml"
-        ];
-      };
-    };
-
-    treefmt.config.settings.formatter.zizmor.options = [
-      "--config"
-      "${zizmorConfigFile}"
-    ];
   };
 }

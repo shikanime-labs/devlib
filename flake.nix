@@ -25,6 +25,12 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    strategic-merge = {
+      url = "path:../devlib.strategic-merge";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -56,6 +62,10 @@
       with flake-parts-lib;
       let
         defaultFlakeModule = importApply ./modules/flake/default.nix { };
+
+        # Import the pins module from the strategic-merge input to enable
+        # SHA digest pinning for GitHub Actions workflow uses:.
+        strategicMergeModule = importApply ./../devlib.strategic-merge/modules/devenv/integrations/github/pins.nix { };
       in
       {
         imports = [
@@ -130,7 +140,26 @@
               self.devenvModules.nix
               self.devenvModules.shell
               self.devenvModules.shikanime-studio
+              strategicMergeModule
             ];
+
+            github.workflows.pin.enable = true;
+            github.workflows.pin.pin = {
+              "actions/create-github-app-token@v3" = "bcd2ba49218906704ab6c1aa796996da409d3eb1";
+              "actions/stale@v11" = "4391f3da665fdf50b6810c1a66712fb9ba21aa93";
+              "shikanime-labs/actions/checkout@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/cleanup@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/nix/setup@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/nix/integration@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/nix/setup-checks-jobs@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/nix/setup-packages-jobs@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/command/backport@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/command/close@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/command/land@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/command/rebase@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+              "shikanime-labs/actions/command/run@v9" = "5993d4d95befc190a14c0d143583683d203ad8d1";
+            };
+
             license = {
               enable = true;
               holder = "Shikanime Studio";
