@@ -3,7 +3,10 @@
   lib,
   config,
   ...
-}:with lib;
+}:
+
+with lib;
+
 let
   cfg = config.github;
   yamlFormat = pkgs.formats.yaml { };
