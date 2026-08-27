@@ -72,6 +72,9 @@ in
         };
 
         formatter.oxfmt = {
+          excludes = [
+            "*.md"
+          ];
           includes = [
             "*.toml"
           ];
