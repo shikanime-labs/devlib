@@ -34,7 +34,6 @@ in
     ./github/nix.nix
     ./github/release.nix
     ./github/skaffold.nix
-    ./github/update.nix
   ];
 
   options.github = {
