@@ -47,6 +47,12 @@ in
         default = { };
         description = "Overrides for skaffold integration";
       };
+
+      otel-endpoint = mkOption {
+        type = types.str;
+        default = "";
+        description = "OTLP collector endpoint for tracing, e.g. localhost:4317";
+      };
     };
   };
 
@@ -167,6 +173,7 @@ in
                   id = "skaffold";
                   uses = "shikanime-labs/actions/skaffold/integration@v9";
                   "with".push = "\${{ inputs.push }}";
+                  "with".otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) {
                   "with" = cfg.settings.integration;
@@ -252,6 +259,7 @@ in
                 "with" = {
                   push = "\${{ inputs.push }}";
                   profile = "\${{ matrix.name }}";
+                  otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
               }
