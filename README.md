@@ -115,7 +115,6 @@ workflow generation:
         commands.enable = true;
         cleanup.enable = true;
         integration.enable = true;
-        triage.enable = true;
         update.enable = true;
         release.enable = true;
       };
