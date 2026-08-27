@@ -121,6 +121,12 @@ in
               contents = "read";
               packages = "write";
             };
+            services = {
+              otel-collector = {
+                image = "otel/opentelemetry-collector:0.112.0";
+                ports = [ "4317:4317" ];
+              };
+            };
             steps = [
               {
                 continue-on-error = true;
@@ -167,6 +173,7 @@ in
                   id = "skaffold";
                   uses = "shikanime-labs/actions/skaffold/integration@v9";
                   "with".push = "\${{ inputs.push }}";
+                  env.OTEL_EXPORTER_OTLP_ENDPOINT = "localhost:4317";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) {
                   "with" = cfg.settings.integration;
@@ -201,6 +208,12 @@ in
             permissions = {
               contents = "read";
               packages = "write";
+            };
+            services = {
+              otel-collector = {
+                image = "otel/opentelemetry-collector:0.112.0";
+                ports = [ "4317:4317" ];
+              };
             };
             strategy = {
               fail-fast = false;
@@ -254,6 +267,7 @@ in
                   profile = "\${{ matrix.name }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
+                env.OTEL_EXPORTER_OTLP_ENDPOINT = "localhost:4317";
               }
             ];
           };
