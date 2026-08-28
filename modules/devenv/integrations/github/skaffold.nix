@@ -11,6 +11,24 @@ let
   yamlFormat = pkgs.formats.yaml { };
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
+
+  # Derives owner/repo + the Flux OCI repository URL from GITHUB_REPOSITORY so it
+  # works under every trigger type (workflow_call does not populate
+  # github.event.repository.name). `matrixNameExpr` is the GitHub expression for
+  # the profile name, or null for the default (repo-named) manifest.
+  repoStep = matrixNameExpr: {
+    id = "repo";
+    shell = "bash";
+    env = lib.optionalAttrs (matrixNameExpr != null) { MATRIX_NAME = matrixNameExpr; };
+    run = ''
+      owner=''${GITHUB_REPOSITORY%%/*}
+      name=''${GITHUB_REPOSITORY##*/}
+      echo "owner=$owner" >> "$GITHUB_OUTPUT"
+      echo "name=$name" >> "$GITHUB_OUTPUT"
+      manifest_repo=''${MATRIX_NAME:-$name}
+      echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
+    '';
+  };
 in
 {
   options.github.workflows.skaffold = {
@@ -46,6 +64,12 @@ in
         type = types.submodule { freeformType = yamlFormat.type; };
         default = { };
         description = "Overrides for skaffold integration";
+      };
+
+      flux-push = mkOption {
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
+        description = "Overrides for the Flux OCI push of rendered manifests (repository is derived automatically)";
       };
 
       otel-endpoint = mkOption {
@@ -146,6 +170,7 @@ in
                 }
                 // cfg.settings.checkout;
               }
+              (repoStep null)
               {
                 uses = "docker/login-action@v4";
                 "with" = {
@@ -197,6 +222,17 @@ in
                   path = "artifacts/skaffold-manifest.yaml";
                 };
               }
+              {
+                id = "flux-push";
+                "if" = "\${{ inputs.push }}";
+                uses = "shikanime-labs/actions/flux/flux-push@v9";
+                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
+                "with" = {
+                  path = "artifacts/skaffold-manifest.yaml";
+                  repository = "\${{ steps.repo.outputs.repository }}";
+                }
+                // cfg.settings.flux-push;
+              }
             ];
           };
 
@@ -232,6 +268,7 @@ in
                 }
                 // cfg.settings.checkout;
               }
+              (repoStep "\${{ matrix.name }}")
               {
                 uses = "docker/login-action@v4";
                 "with" = {
@@ -262,6 +299,28 @@ in
                   otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
+              }
+              {
+                name = "Save manifest";
+                env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
+                run = ''
+                  mkdir -p artifacts
+                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
+                  $SKAFFOLD_MANIFEST
+                  MANIFEST_EOF
+                '';
+                shell = "bash";
+              }
+              {
+                id = "flux-push";
+                "if" = "\${{ inputs.push }}";
+                uses = "shikanime-labs/actions/flux/flux-push@v9";
+                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
+                "with" = {
+                  path = "artifacts/skaffold-manifest.yaml";
+                  repository = "\${{ steps.repo.outputs.repository }}";
+                }
+                // cfg.settings.flux-push;
               }
             ];
           };
