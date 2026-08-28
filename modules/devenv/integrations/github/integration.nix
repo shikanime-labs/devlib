@@ -32,6 +32,7 @@ in
           "ready_for_review"
         ];
       };
+      on.merge_group.types = [ "checks_requested" ];
       permissions.contents = "read";
     };
   };
