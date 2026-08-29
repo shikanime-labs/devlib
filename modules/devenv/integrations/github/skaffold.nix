@@ -11,24 +11,6 @@ let
   yamlFormat = pkgs.formats.yaml { };
 
   githubToken = "\${{ steps.createGithubAppToken.outputs.token || secrets.GITHUB_TOKEN }}";
-
-  # Derives owner/repo + the Flux OCI repository URL from GITHUB_REPOSITORY so it
-  # works under every trigger type (workflow_call does not populate
-  # github.event.repository.name). `matrixNameExpr` is the GitHub expression for
-  # the profile name, or null for the default (repo-named) manifest.
-  repoStep = matrixNameExpr: {
-    id = "repo";
-    shell = "bash";
-    env = lib.optionalAttrs (matrixNameExpr != null) { MATRIX_NAME = matrixNameExpr; };
-    run = ''
-      owner=''${GITHUB_REPOSITORY%%/*}
-      name=''${GITHUB_REPOSITORY##*/}
-      echo "owner=$owner" >> "$GITHUB_OUTPUT"
-      echo "name=$name" >> "$GITHUB_OUTPUT"
-      manifest_repo=''${MATRIX_NAME:-$name}
-      echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
-    '';
-  };
 in
 {
   options.github.workflows.skaffold = {
@@ -170,8 +152,18 @@ in
                 }
                 // cfg.settings.checkout;
               }
-              (repoStep null)
               {
+                id = "repo";
+                shell = "bash";
+                run = ''
+                  owner=''${GITHUB_REPOSITORY%%/*}
+                  name=''${GITHUB_REPOSITORY##*/}
+                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
+                  echo "name=$name" >> "$GITHUB_OUTPUT"
+                  echo "repository=ghcr.io/$owner/$name/manifests/$name" >> "$GITHUB_OUTPUT"
+                '';
+              }
+{
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -226,7 +218,6 @@ in
                 id = "flux-push";
                 "if" = "\${{ inputs.push }}";
                 uses = "shikanime-labs/actions/flux/flux-push@v9";
-                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                 "with" = {
                   path = "artifacts/skaffold-manifest.yaml";
                   repository = "\${{ steps.repo.outputs.repository }}";
@@ -268,8 +259,20 @@ in
                 }
                 // cfg.settings.checkout;
               }
-              (repoStep "\${{ matrix.name }}")
               {
+                id = "repo";
+                shell = "bash";
+                env.matrix_name = "\${{ matrix.name }}";
+                run = ''
+                  owner=''${GITHUB_REPOSITORY%%/*}
+                  name=''${GITHUB_REPOSITORY##*/}
+                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
+                  echo "name=$name" >> "$GITHUB_OUTPUT"
+                  manifest_repo=''${matrix_name:-$name}
+                  echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
+                '';
+              }
+{
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -315,7 +318,6 @@ in
                 id = "flux-push";
                 "if" = "\${{ inputs.push }}";
                 uses = "shikanime-labs/actions/flux/flux-push@v9";
-                env = "\${{ fromJSON(steps.direnv.outputs.env) }}";
                 "with" = {
                   path = "artifacts/skaffold-manifest.yaml";
                   repository = "\${{ steps.repo.outputs.repository }}";
