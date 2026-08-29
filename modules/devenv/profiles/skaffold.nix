@@ -13,5 +13,8 @@
 
   github.workflows.skaffold.enable = true;
 
-  packages = [ pkgs.skaffold ];
+  packages = [
+    pkgs.skaffold
+    pkgs.fluxcd
+  ];
 }

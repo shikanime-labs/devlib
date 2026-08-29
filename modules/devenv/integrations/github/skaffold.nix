@@ -48,6 +48,12 @@ in
         description = "Overrides for skaffold integration";
       };
 
+      flux-push = mkOption {
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
+        description = "Overrides for the Flux OCI push of rendered manifests (repository is derived automatically)";
+      };
+
       otel-endpoint = mkOption {
         type = types.str;
         default = "";
@@ -147,6 +153,17 @@ in
                 // cfg.settings.checkout;
               }
               {
+                id = "repo";
+                shell = "bash";
+                run = ''
+                  owner=''${GITHUB_REPOSITORY%%/*}
+                  name=''${GITHUB_REPOSITORY##*/}
+                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
+                  echo "name=$name" >> "$GITHUB_OUTPUT"
+                  echo "repository=ghcr.io/$owner/$name/manifests/$name" >> "$GITHUB_OUTPUT"
+                '';
+              }
+{
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -197,6 +214,16 @@ in
                   path = "artifacts/skaffold-manifest.yaml";
                 };
               }
+              {
+                id = "flux-push";
+                "if" = "\${{ inputs.push }}";
+                uses = "shikanime-labs/actions/flux/flux-push@v9";
+                "with" = {
+                  path = "artifacts/skaffold-manifest.yaml";
+                  repository = "\${{ steps.repo.outputs.repository }}";
+                }
+                // cfg.settings.flux-push;
+              }
             ];
           };
 
@@ -233,6 +260,19 @@ in
                 // cfg.settings.checkout;
               }
               {
+                id = "repo";
+                shell = "bash";
+                env.matrix_name = "\${{ matrix.name }}";
+                run = ''
+                  owner=''${GITHUB_REPOSITORY%%/*}
+                  name=''${GITHUB_REPOSITORY##*/}
+                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
+                  echo "name=$name" >> "$GITHUB_OUTPUT"
+                  manifest_repo=''${matrix_name:-$name}
+                  echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
+                '';
+              }
+{
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -262,6 +302,27 @@ in
                   otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
+              }
+              {
+                name = "Save manifest";
+                env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
+                run = ''
+                  mkdir -p artifacts
+                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
+                  $SKAFFOLD_MANIFEST
+                  MANIFEST_EOF
+                '';
+                shell = "bash";
+              }
+              {
+                id = "flux-push";
+                "if" = "\${{ inputs.push }}";
+                uses = "shikanime-labs/actions/flux/flux-push@v9";
+                "with" = {
+                  path = "artifacts/skaffold-manifest.yaml";
+                  repository = "\${{ steps.repo.outputs.repository }}";
+                }
+                // cfg.settings.flux-push;
               }
             ];
           };
