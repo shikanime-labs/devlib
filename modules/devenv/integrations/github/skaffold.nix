@@ -262,13 +262,13 @@ in
               {
                 id = "repo";
                 shell = "bash";
-                env.matrix_name = "\${{ matrix.name }}";
+                env.MATRIX_NAME = "\${{ matrix.name }}";
                 run = ''
                   owner=''${GITHUB_REPOSITORY%%/*}
                   name=''${GITHUB_REPOSITORY##*/}
                   echo "owner=$owner" >> "$GITHUB_OUTPUT"
                   echo "name=$name" >> "$GITHUB_OUTPUT"
-                  manifest_repo=''${matrix_name:-$name}
+                  manifest_repo=''${MATRIX_NAME:-$name}
                   echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
                 '';
               }
