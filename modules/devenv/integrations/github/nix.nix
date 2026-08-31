@@ -99,6 +99,7 @@ in
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
+                  extra-platforms = "\${{ matrix.system == 'x86_64-linux' && 'arm64' || matrix.system == 'aarch64-linux' && 'amd64' || '' }}";
                   github-token = githubToken;
                 }
                 // cfg.settings.setup-nix;
@@ -155,6 +156,7 @@ in
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
+                  extra-platforms = "\${{ matrix.system == 'x86_64-linux' && 'arm64' || matrix.system == 'aarch64-linux' && 'amd64' || '' }}";
                   github-token = githubToken;
                 }
                 // cfg.settings.setup-nix;
