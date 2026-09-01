@@ -3,8 +3,6 @@ with lib;
 {
   containers = mkForce { };
 
-  ghstack.enable = true;
-
   github = {
     enable = true;
     workflows = {

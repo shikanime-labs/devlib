@@ -163,7 +163,7 @@ in
                   echo "repository=ghcr.io/$owner/$name/manifests/$name" >> "$GITHUB_OUTPUT"
                 '';
               }
-{
+              {
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -272,7 +272,7 @@ in
                   echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
                 '';
               }
-{
+              {
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
