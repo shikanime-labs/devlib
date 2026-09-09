@@ -337,6 +337,7 @@ in
             "if" =
               "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || (github.event.pull_request.draft == false && github.event.pull_request.head.repo.fork == false) }}";
             uses = "./.github/workflows/skaffold.yaml";
+            "with".push = false;
             permissions = {
               contents = "read";
               packages = "write";
