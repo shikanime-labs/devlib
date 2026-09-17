@@ -32,7 +32,5 @@ environment.
 - Require signed commits
 - Squash+rebase merge only
 
-Security issues: see [SECURITY.md](SECURITY.md).
-
 _Licensed under Apache-2.0. Run `nix flake check` before submitting. Keep
 backward compatibility with existing consumer flakes._
