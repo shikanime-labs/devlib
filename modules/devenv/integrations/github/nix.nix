@@ -285,7 +285,7 @@ in
           nix = {
             "if" =
               "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
-            uses = "./.github/workflows/nix.yaml";
+            uses = "$/.github/workflows/nix.yaml";
             permissions = {
               contents = "read";
               packages = "write";
@@ -307,7 +307,7 @@ in
       github.settings.workflows.release = {
         jobs = {
           nix = {
-            uses = "./.github/workflows/nix.yaml";
+            uses = "$/.github/workflows/nix.yaml";
             permissions = {
               contents = "read";
               packages = "write";
