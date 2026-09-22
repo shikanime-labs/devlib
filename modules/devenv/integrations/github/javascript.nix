@@ -155,7 +155,7 @@ in
           javascript = {
             "if" =
               "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}";
-            uses = "./.github/workflows/javascript.yaml";
+            uses = "$/.github/workflows/javascript.yaml";
             secrets.OPERATOR_PRIVATE_KEY = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
           };
         };
@@ -167,7 +167,7 @@ in
       github.settings.workflows.release = {
         jobs = {
           javascript = {
-            uses = "./.github/workflows/javascript.yaml";
+            uses = "$/.github/workflows/javascript.yaml";
             secrets.OPERATOR_PRIVATE_KEY = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
           };
 

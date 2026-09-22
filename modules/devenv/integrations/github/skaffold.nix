@@ -336,7 +336,7 @@ in
           skaffold = {
             "if" =
               "\${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' || (github.event.pull_request.draft == false && github.event.pull_request.head.repo.fork == false) }}";
-            uses = "./.github/workflows/skaffold.yaml";
+            uses = "$/.github/workflows/skaffold.yaml";
             "with".push = false;
             permissions = {
               contents = "read";
@@ -353,7 +353,7 @@ in
       github.settings.workflows.release = {
         jobs = {
           skaffold = {
-            uses = "./.github/workflows/skaffold.yaml";
+            uses = "$/.github/workflows/skaffold.yaml";
             permissions = {
               contents = "read";
               packages = "write";
