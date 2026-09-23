@@ -48,12 +48,5 @@ in
 
   config = mkIf cfg.enable {
     packages = [ wrapped ];
-
-    tasks."devlib:sops:updatekeys" = {
-      description = "Run sops updatekeys";
-      exec = ''
-        ${getExe pkgs.findutils} . -type d -name ".*" -not -name "." -prune -o -type f \( -name "*.enc" -o -name "*.enc.*" \) -exec ${getExe wrapped} updatekeys --yes {} +
-      '';
-    };
   };
 }
