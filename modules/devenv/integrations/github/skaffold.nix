@@ -37,21 +37,10 @@ in
         default = { };
         description = "Overrides for setup-nix";
       };
-      setup-profiles-jobs = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
-        description = "Overrides for setup-profiles-jobs";
-      };
       integration = mkOption {
         type = types.submodule { freeformType = yamlFormat.type; };
         default = { };
         description = "Overrides for skaffold integration";
-      };
-
-      flux-push = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
-        description = "Overrides for the Flux OCI push of rendered manifests (repository is derived automatically)";
       };
 
       otel-endpoint = mkOption {
@@ -81,51 +70,6 @@ in
         permissions.contents = "read";
 
         jobs = {
-          setup-profiles-jobs = {
-            name = "Setup Profiles Jobs";
-            runs-on = "ubuntu-latest";
-            outputs = {
-              continue = "\${{ steps.setup-profiles-jobs.outputs.continue }}";
-              matrix = "\${{ steps.setup-profiles-jobs.outputs.matrix }}";
-            };
-            steps = [
-              {
-                continue-on-error = true;
-                id = "createGithubAppToken";
-                uses = "actions/create-github-app-token@v3";
-                "with" = {
-                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "read";
-                }
-                // cfg.settings.create-github-app-token;
-              }
-              {
-                uses = "shikanime-labs/actions/checkout@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.checkout;
-              }
-              {
-                uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.setup-nix;
-              }
-              (
-                {
-                  id = "setup-profiles-jobs";
-                  uses = "shikanime-labs/actions/skaffold/setup-profiles-jobs@v9";
-                }
-                // optionalAttrs (cfg.settings.setup-profiles-jobs != { }) {
-                  "with" = cfg.settings.setup-profiles-jobs;
-                }
-              )
-            ];
-          };
-
           build-render = {
             name = "Build & Render";
             runs-on = "ubuntu-latest";
@@ -153,17 +97,6 @@ in
                 // cfg.settings.checkout;
               }
               {
-                id = "repo";
-                shell = "bash";
-                run = ''
-                  owner=''${GITHUB_REPOSITORY%%/*}
-                  name=''${GITHUB_REPOSITORY##*/}
-                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
-                  echo "name=$name" >> "$GITHUB_OUTPUT"
-                  echo "repository=ghcr.io/$owner/$name/manifests/$name" >> "$GITHUB_OUTPUT"
-                '';
-              }
-              {
                 uses = "docker/login-action@v4";
                 "with" = {
                   registry = "ghcr.io";
@@ -185,144 +118,22 @@ in
                 }
                 // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
               )
-              (
-                {
-                  id = "skaffold";
-                  uses = "shikanime-labs/actions/skaffold/integration@v9";
-                  "with".push = "\${{ inputs.push }}";
-                  "with".otel-endpoint = "\${{ inputs.otel-endpoint }}";
+              {
+                id = "flux-integration";
+                "if" = "\${{ inputs.push }}";
+                uses = "shikanime-labs/actions/flux/flux-integration@v9";
+              }
+              {
+                id = "skaffold";
+                uses = "shikanime-labs/actions/skaffold/integration@v9";
+                "if" = "\${{ inputs.push != 'true' }}";
+                "with" = {
+                  push = "\${{ inputs.push }}";
+                  otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
                 // optionalAttrs (cfg.settings.integration != { }) {
                   "with" = cfg.settings.integration;
-                }
-              )
-              {
-                name = "Save manifest";
-                env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
-                run = ''
-                  mkdir -p artifacts
-                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
-                  $SKAFFOLD_MANIFEST
-                  MANIFEST_EOF
-                '';
-                shell = "bash";
-              }
-              {
-                uses = "actions/upload-artifact@v4";
-                "with" = {
-                  name = "skaffold-manifest";
-                  path = "artifacts/skaffold-manifest.yaml";
                 };
-              }
-              {
-                id = "flux-push";
-                "if" = "\${{ inputs.push }}";
-                uses = "shikanime-labs/actions/flux/flux-push@v9";
-                "with" = {
-                  path = "artifacts/skaffold-manifest.yaml";
-                  repository = "\${{ steps.repo.outputs.repository }}";
-                }
-                // cfg.settings.flux-push;
-              }
-            ];
-          };
-
-          build-render-profile = {
-            name = "Build & Render (Profile)";
-            needs = [ "setup-profiles-jobs" ];
-            "if" = "\${{ needs['setup-profiles-jobs'].outputs.continue == 'true' }}";
-            runs-on = "ubuntu-latest";
-            permissions = {
-              contents = "read";
-              packages = "write";
-            };
-            strategy = {
-              fail-fast = false;
-              matrix.include = "\${{ fromJSON(needs['setup-profiles-jobs'].outputs.matrix) }}";
-            };
-            steps = [
-              {
-                continue-on-error = true;
-                id = "createGithubAppToken";
-                uses = "actions/create-github-app-token@v3";
-                "with" = {
-                  client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                  private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                  permission-contents = "read";
-                }
-                // cfg.settings.create-github-app-token;
-              }
-              {
-                uses = "shikanime-labs/actions/checkout@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.checkout;
-              }
-              {
-                id = "repo";
-                shell = "bash";
-                env.MATRIX_NAME = "\${{ matrix.name }}";
-                run = ''
-                  owner=''${GITHUB_REPOSITORY%%/*}
-                  name=''${GITHUB_REPOSITORY##*/}
-                  echo "owner=$owner" >> "$GITHUB_OUTPUT"
-                  echo "name=$name" >> "$GITHUB_OUTPUT"
-                  manifest_repo=''${MATRIX_NAME:-$name}
-                  echo "repository=ghcr.io/$owner/$name/manifests/$manifest_repo" >> "$GITHUB_OUTPUT"
-                '';
-              }
-              {
-                uses = "docker/login-action@v4";
-                "with" = {
-                  registry = "ghcr.io";
-                  username = "\${{ github.actor }}";
-                  password = "\${{ secrets.GITHUB_TOKEN }}";
-                };
-              }
-              {
-                uses = "shikanime-labs/actions/nix/setup@v9";
-                "with" = {
-                  github-token = githubToken;
-                }
-                // cfg.settings.setup-nix;
-              }
-              (
-                {
-                  id = "direnv";
-                  uses = "shikanime-labs/actions/direnv@v9";
-                }
-                // optionalAttrs (cfg.settings.direnv != { }) { "with" = cfg.settings.direnv; }
-              )
-              {
-                uses = "shikanime-labs/actions/skaffold/integration@v9";
-                "with" = {
-                  push = "\${{ inputs.push }}";
-                  profile = "\${{ matrix.name }}";
-                  otel-endpoint = "\${{ inputs.otel-endpoint }}";
-                }
-                // optionalAttrs (cfg.settings.integration != { }) cfg.settings.integration;
-              }
-              {
-                name = "Save manifest";
-                env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
-                run = ''
-                  mkdir -p artifacts
-                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
-                  $SKAFFOLD_MANIFEST
-                  MANIFEST_EOF
-                '';
-                shell = "bash";
-              }
-              {
-                id = "flux-push";
-                "if" = "\${{ inputs.push }}";
-                uses = "shikanime-labs/actions/flux/flux-push@v9";
-                "with" = {
-                  path = "artifacts/skaffold-manifest.yaml";
-                  repository = "\${{ steps.repo.outputs.repository }}";
-                }
-                // cfg.settings.flux-push;
               }
             ];
           };
