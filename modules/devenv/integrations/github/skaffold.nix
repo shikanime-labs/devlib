@@ -201,9 +201,7 @@ in
                 env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
                 run = ''
                   mkdir -p artifacts
-                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
-                  $SKAFFOLD_MANIFEST
-                  MANIFEST_EOF
+                  printf '%s\n' "$SKAFFOLD_MANIFEST" > artifacts/skaffold-manifest.yaml
                 '';
                 shell = "bash";
               }
@@ -308,9 +306,7 @@ in
                 env.SKAFFOLD_MANIFEST = "\${{ steps.skaffold.outputs.manifest }}";
                 run = ''
                   mkdir -p artifacts
-                  cat > artifacts/skaffold-manifest.yaml <<'MANIFEST_EOF'
-                  $SKAFFOLD_MANIFEST
-                  MANIFEST_EOF
+                  printf '%s\n' "$SKAFFOLD_MANIFEST" > artifacts/skaffold-manifest.yaml
                 '';
                 shell = "bash";
               }
