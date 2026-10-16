@@ -6,11 +6,9 @@ with lib;
   github = {
     enable = true;
     workflows = {
-      cleanup.enable = true;
       commands.enable = true;
       integration.enable = true;
       release.enable = true;
-      triage.enable = true;
     };
 
     settings.workflows.integration.jobs.nix."with"."cachix-name" = "shikanime-studio";
