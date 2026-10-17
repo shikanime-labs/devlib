@@ -47,6 +47,11 @@ in
         default = { };
         description = "Overrides for setup-packages-jobs";
       };
+      tailscale = mkOption {
+        type = types.submodule { freeformType = yamlFormat.type; };
+        default = { };
+        description = "Overrides for Connect Tailscale";
+      };
     };
   };
 
@@ -70,7 +75,10 @@ in
           default = "";
         };
 
-        permissions.contents = "read";
+        permissions = {
+          contents = "read";
+          id-token = "write";
+        };
 
         jobs = {
           checks = {
@@ -78,6 +86,7 @@ in
             needs = [ "setup-checks-jobs" ];
             "if" = "\${{ needs['setup-checks-jobs'].outputs.continue == 'true' }}";
             runs-on = "\${{ matrix.runner }}";
+            env.NIX_SSHOPTS = "-o StrictHostKeyChecking=accept-new";
             strategy = {
               fail-fast = false;
               matrix.include = "\${{ fromJSON(needs['setup-checks-jobs'].outputs.matrix) }}";
@@ -111,6 +120,15 @@ in
                 }
                 // cfg.settings.checkout;
               }
+              {
+                uses = "tailscale/github-action@v4";
+                "with" = {
+                  oauth-client-id = "\${{ vars.TS_OAUTH_CLIENT_ID }}";
+                  audience = "\${{ vars.TS_AUDIENCE }}";
+                  tags = "tag:ci";
+                }
+                // cfg.settings.tailscale;
+              }
               (
                 {
                   id = "direnv";
@@ -131,8 +149,10 @@ in
             needs = [ "setup-packages-jobs" ];
             "if" = "\${{ needs['setup-packages-jobs'].outputs.continue == 'true' }}";
             runs-on = "\${{ matrix.runner }}";
+            env.NIX_SSHOPTS = "-o StrictHostKeyChecking=accept-new";
             permissions = {
               contents = "read";
+              id-token = "write";
               packages = "write";
             };
             strategy = {
@@ -167,6 +187,15 @@ in
                   github-token = githubToken;
                 }
                 // cfg.settings.checkout;
+              }
+              {
+                uses = "tailscale/github-action@v4";
+                "with" = {
+                  oauth-client-id = "\${{ vars.TS_OAUTH_CLIENT_ID }}";
+                  audience = "\${{ vars.TS_AUDIENCE }}";
+                  tags = "tag:ci";
+                }
+                // cfg.settings.tailscale;
               }
               (
                 {
