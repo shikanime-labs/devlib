@@ -18,9 +18,7 @@ in
       description = "License generator function";
     };
 
-    lib = lib.mkOption {
-      type = lib.types.attrsOf lib.types.anything;
-    };
+    lib = lib.mkOption { type = lib.types.attrsOf lib.types.anything; };
 
     holder = mkOption {
       type = types.str;
@@ -67,11 +65,7 @@ in
             sha256 = "0c1xaay1fd00xgri0z447q2i8s3mpxqw9da27hfd6fznjsdp9iyg";
           };
         in
-        {
-          year,
-          holder,
-          ...
-        }:
+        { year, holder, ... }:
         pkgs.runCommand "LICENSE" { inherit year holder; } ''
           ${pkgs.gnused}/bin/sed \
             -e "s/\[yyyy\]/$year/g" \
@@ -86,11 +80,7 @@ in
             sha256 = "1f7m7v5af7pk46m7q2qi3xp51x6hjvclh44dj47k1cxc7jqrv4g6";
           };
         in
-        {
-          year,
-          holder,
-          ...
-        }:
+        { year, holder, ... }:
         pkgs.runCommand "LICENSE" { inherit year holder; } ''
           ${pkgs.gnused}/bin/sed \
             -e '/^---$/,/^---$/d' \

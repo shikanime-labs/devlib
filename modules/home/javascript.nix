@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 let
   cacheDir =
     if pkgs.stdenv.hostPlatform.isDarwin then

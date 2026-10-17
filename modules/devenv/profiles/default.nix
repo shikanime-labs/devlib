@@ -1,5 +1,1 @@
-{ lib, ... }:
-with lib;
-{
-  imports = filesystem.listFilesRecursive ../integrations;
-}
+{ lib, ... }: with lib; { imports = filesystem.listFilesRecursive ../integrations; }

@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 let
   configDir =
     if pkgs.stdenv.hostPlatform.isDarwin then

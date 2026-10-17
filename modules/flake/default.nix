@@ -44,9 +44,7 @@ in
     perSystem =
       { config, ... }:
       mkMerge [
-        (mkIf cfg.devenv.enable {
-          devenv.modules = [ ../devenv/profiles/default.nix ];
-        })
+        (mkIf cfg.devenv.enable { devenv.modules = [ ../devenv/profiles/default.nix ]; })
 
         (mkIf cfg.git-hooks.enable {
           pre-commit.settings =

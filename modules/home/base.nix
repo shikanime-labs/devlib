@@ -1,5 +1,1 @@
-{ pkgs, ... }: {
-  home.packages = [
-    pkgs.yaml-language-server
-  ];
-}
+{ pkgs, ... }: { home.packages = [ pkgs.yaml-language-server ]; }

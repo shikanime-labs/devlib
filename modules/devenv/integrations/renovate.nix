@@ -61,9 +61,7 @@ in
         enable = mkEnableOption "enable renovate";
 
         settings = mkOption {
-          type = types.submodule {
-            freeformType = jsonFormat.type;
-          };
+          type = types.submodule { freeformType = jsonFormat.type; };
           default = { };
           description = "Renovate settings";
         };

@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 let
   cargoConfigDir =
     if pkgs.stdenv.hostPlatform.isDarwin then
@@ -20,9 +16,7 @@ in
   home = {
     packages = [ pkgs.rustup ];
 
-    sessionPath = [
-      "${cargoConfigDir}/bin"
-    ];
+    sessionPath = [ "${cargoConfigDir}/bin" ];
 
     sessionVariables = {
       CARGO_HOME = cargoConfigDir;

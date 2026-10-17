@@ -88,7 +88,5 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    packages = [ wrapped ];
-  };
+  config = mkIf cfg.enable { packages = [ wrapped ]; };
 }

@@ -8,9 +8,7 @@ with lib;
 let
   jsonFormat = pkgs.formats.json { };
 
-  configFile = jsonFormat.generate ".oxfmtrc.json" {
-    printWidth = 80;
-  };
+  configFile = jsonFormat.generate ".oxfmtrc.json" { printWidth = 80; };
 in
 {
   imports = [ ./default.nix ];
@@ -53,9 +51,7 @@ in
             "--restructure"
             "--in-place"
           ];
-          includes = [
-            "*.json"
-          ];
+          includes = [ "*.json" ];
         };
 
         formatter."dyff-yaml" = {
@@ -72,12 +68,8 @@ in
         };
 
         formatter.oxfmt = {
-          excludes = [
-            "*.md"
-          ];
-          includes = [
-            "*.toml"
-          ];
+          excludes = [ "*.md" ];
+          includes = [ "*.toml" ];
           options = [
             "--config"
             (toString configFile)

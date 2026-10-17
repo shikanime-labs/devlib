@@ -57,9 +57,7 @@ in
     };
 
     template = mkOption {
-      type = types.submodule {
-        freeformType = yamlFormat.type;
-      };
+      type = types.submodule { freeformType = yamlFormat.type; };
       default = {
         version = "v2";
         plugins = [ ];

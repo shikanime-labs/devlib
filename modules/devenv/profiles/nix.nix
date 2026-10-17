@@ -5,9 +5,7 @@
 
   git-hooks.hooks.flake-checker.enable = true;
 
-  gitignore.templates = [
-    "repo:shikanime-labs/gitignore/refs/heads/main/Devenv.gitignore"
-  ];
+  gitignore.templates = [ "repo:shikanime-labs/gitignore/refs/heads/main/Devenv.gitignore" ];
 
   languages.nix.enable = true;
 
@@ -15,7 +13,10 @@
 
   treefmt.config.programs = {
     deadnix.enable = true;
-    nixfmt.enable = true;
+    nixfmt = {
+      enable = true;
+      strict = true;
+    };
     statix.enable = true;
   };
 }

@@ -1,17 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
-{
+{ config, pkgs, ... }: {
   home = {
-    packages = [
-      pkgs.gopls
-    ];
+    packages = [ pkgs.gopls ];
 
-    sessionPath = [
-      "${config.xdg.dataHome}/go/bin"
-    ];
+    sessionPath = [ "${config.xdg.dataHome}/go/bin" ];
   };
 
   programs = {

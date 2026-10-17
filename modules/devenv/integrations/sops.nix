@@ -38,15 +38,11 @@ in
     };
 
     settings = mkOption {
-      type = types.submodule {
-        freeformType = yamlFormat.type;
-      };
+      type = types.submodule { freeformType = yamlFormat.type; };
       default = { };
       description = "SOPS YAML configuration passed via --config";
     };
   };
 
-  config = mkIf cfg.enable {
-    packages = [ wrapped ];
-  };
+  config = mkIf cfg.enable { packages = [ wrapped ]; };
 }

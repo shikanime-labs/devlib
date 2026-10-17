@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}:
-{
+{ config, pkgs, ... }: {
   imports = [ ./base.nix ];
 
   env = {

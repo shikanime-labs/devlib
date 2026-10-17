@@ -192,9 +192,7 @@ in
                   "with".push = "\${{ inputs.push }}";
                   "with".otel-endpoint = "\${{ inputs.otel-endpoint }}";
                 }
-                // optionalAttrs (cfg.settings.integration != { }) {
-                  "with" = cfg.settings.integration;
-                }
+                // optionalAttrs (cfg.settings.integration != { }) { "with" = cfg.settings.integration; }
               )
               {
                 name = "Save manifest";

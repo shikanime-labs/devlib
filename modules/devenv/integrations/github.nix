@@ -50,11 +50,7 @@ in
           description = "Global configuration merged into all workflows";
           type = types.submodule {
             options.actions = mkOption {
-              type = types.attrsOf (
-                types.submodule {
-                  freeformType = yamlFormat.type;
-                }
-              );
+              type = types.attrsOf (types.submodule { freeformType = yamlFormat.type; });
               default = { };
               description = "Global actions configuration";
             };

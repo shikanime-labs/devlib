@@ -3,9 +3,7 @@
 
   git-hooks.hooks.chktex.enable = true;
 
-  gitignore.templates = [
-    "repo:shikanime/gitignore/refs/heads/main/Latex.gitignore"
-  ];
+  gitignore.templates = [ "repo:shikanime/gitignore/refs/heads/main/Latex.gitignore" ];
 
   languages.texlive = {
     enable = true;

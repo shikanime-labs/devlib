@@ -1,17 +1,11 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 let
   yamlFormat = pkgs.formats.yaml { };
 
   golangciLintConfigFile = yamlFormat.generate "golangci-lint.yaml" {
     version = 2;
     formatters = {
-      enable = [
-        "gci"
-      ];
+      enable = [ "gci" ];
       settings.gci.sections = [
         "standard"
         "default"
