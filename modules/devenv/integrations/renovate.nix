@@ -4,7 +4,9 @@
   config,
   ...
 }:
+
 with lib;
+
 let
   cfg = config.renovate;
 

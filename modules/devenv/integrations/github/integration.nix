@@ -1,5 +1,7 @@
 { config, lib, ... }:
+
 with lib;
+
 let
   cfg = config.github.workflows.integration;
 in

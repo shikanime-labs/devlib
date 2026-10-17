@@ -4,7 +4,9 @@
   pkgs,
   ...
 }:
+
 with lib;
+
 let
   configDir =
     if pkgs.stdenv.hostPlatform.isDarwin then

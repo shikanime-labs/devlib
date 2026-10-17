@@ -1,4 +1,5 @@
 { config, pkgs, ... }:
+
 let
   cargoConfigDir =
     if pkgs.stdenv.hostPlatform.isDarwin then

@@ -4,7 +4,9 @@
   pkgs,
   ...
 }:
+
 with lib;
+
 let
   cfg = config.license;
 in
