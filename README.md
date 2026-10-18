@@ -10,7 +10,7 @@ files.
 This flake exports:
 
 - `devenvModule`: a module that enables all integrated generators (gitignore,
-  GitHub workflows, renovate, sops, …)
+  GitHub workflows, sops, …)
 - `devenvModules.<name>`: opinionated profiles you can compose in a
   `devenv.shell` (nix, javascript, rust, …)
 - `homeModule` and `homeModules.<name>`: Home Manager modules for tooling and
@@ -76,7 +76,7 @@ Add devlib to your flake and import one or more `devenv` profiles.
 
 Profiles are composable `devenv` modules exported under `devenvModules.<name>`.
 Most profiles import a shared base that enables formatting, Git hooks, and
-generators (gitignore, GitHub workflows, renovate, …).
+generators (gitignore, GitHub workflows, …).
 
 Available profiles:
 

@@ -13,6 +13,4 @@
     settings.workflows.integration.jobs.nix."with"."cachix-name" = "shikanime-studio";
     settings.workflows.release.jobs.nix."with"."cachix-name" = "shikanime-studio";
   };
-
-  renovate.enable = true;
 }

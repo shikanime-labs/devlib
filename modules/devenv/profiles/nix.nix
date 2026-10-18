@@ -11,8 +11,6 @@
 
   languages.nix.enable = true;
 
-  renovate.settings.nix.enabled = true;
-
   treefmt.config.settings.formatter.nix-spacing = {
     command = pkgs.writers.writePython3Bin "nix-spacing" { } ''
       import sys

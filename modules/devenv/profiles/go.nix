@@ -93,8 +93,6 @@ in
     templates = [ "tt:go" ];
   };
 
-  renovate.settings.gomod.enabled = true;
-
   languages.go.enable = true;
 
   treefmt.config.programs = {

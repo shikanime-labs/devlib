@@ -3,8 +3,6 @@
 
   gitignore.templates = [ "tt:python" ];
 
-  renovate.settings.uv.enabled = true;
-
   languages.python = {
     enable = true;
     uv = {
