@@ -22,20 +22,6 @@ in
     content = [ ".pre-commit-config.yaml" ];
   };
 
-  renovate.settings = {
-    extends = [
-      "config:best-practices"
-      "security:openssf-scorecard"
-    ];
-    postUpgradeTasks = {
-      commands = [ "nix fmt" ];
-      allowedCommands = [ "nix fmt" ];
-      fileFilters = [ "**/*.nix" ];
-      executionMode = "branch";
-      installTools.nix = { };
-    };
-  };
-
   treefmt = {
     enable = true;
     config = {

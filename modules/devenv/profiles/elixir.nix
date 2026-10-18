@@ -6,8 +6,6 @@
     "tt:elixir"
   ];
 
-  renovate.settings.mix.enabled = true;
-
   languages.elixir.enable = true;
 
   treefmt.config.programs = {
