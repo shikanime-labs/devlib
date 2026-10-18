@@ -123,7 +123,7 @@
           };
         };
 
-        perSystem = { config, ... }: {
+        perSystem = _: {
           devenv.shells.default = {
             imports = [
               self.devenvModules.git
@@ -131,12 +131,6 @@
               self.devenvModules.shell
               self.devenvModules.shikanime-studio
             ];
-            license = {
-              enable = true;
-              holder = "Shikanime Studio";
-              package = config.devenv.shells.default.license.lib.pkgs.asl20;
-              year = "2025";
-            };
           };
         };
 
