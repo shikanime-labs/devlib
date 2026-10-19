@@ -47,32 +47,6 @@ jobs:
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           username: yorha-automata
-  land:
-    if: github.event.issue.pull_request != null && (contains(github.event.comment.body, '.land') || contains(github.event.comment.body, '.force-land'))
-    runs-on: ubuntu-slim
-    steps:
-      - id: createGithubAppToken
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
-        with:
-          client-id: ${{ vars.OPERATOR_APP_CLIENT_ID }}
-          permission-administration: read
-          permission-contents: write
-          permission-issues: write
-          permission-pull-requests: write
-          permission-workflows: write
-          private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-labs/actions/nix/setup@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
-        with:
-          github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-labs/actions/command/land@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
-        with:
-          email: automata@shikanime.studio
-          fullname: Automata
-          github-token: ${{ steps.createGithubAppToken.outputs.token }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          sign-commits: true
-          username: yorha-automata
   rebase:
     if: github.event.issue.pull_request != null && contains(github.event.comment.body, '.rebase')
     runs-on: ubuntu-slim

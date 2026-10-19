@@ -32,11 +32,6 @@ in
         default = { };
         description = "Overrides for create-github-app-token";
       };
-      land = mkOption {
-        type = types.submodule { freeformType = yamlFormat.type; };
-        default = { };
-        description = "Overrides for land";
-      };
       rebase = mkOption {
         type = types.submodule { freeformType = yamlFormat.type; };
         default = { };
@@ -125,47 +120,6 @@ in
                 username = "yorha-automata";
               }
               // cfg.settings.close;
-            }
-          ];
-        };
-        land = {
-          "if" =
-            "github.event.issue.pull_request != null && (contains(github.event.comment.body, '.land') || contains(github.event.comment.body, '.force-land'))";
-          runs-on = "ubuntu-slim";
-          steps = [
-            {
-              id = "createGithubAppToken";
-              uses = "actions/create-github-app-token@v3";
-              "with" = {
-                client-id = "\${{ vars.OPERATOR_APP_CLIENT_ID }}";
-                private-key = "\${{ secrets.OPERATOR_PRIVATE_KEY }}";
-                permission-administration = "read";
-                permission-contents = "write";
-                permission-issues = "write";
-                permission-pull-requests = "write";
-                permission-workflows = "write";
-              }
-              // cfg.settings.create-github-app-token;
-            }
-            {
-              uses = "shikanime-labs/actions/nix/setup@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-              }
-              // cfg.settings.setup-nix;
-            }
-            {
-              uses = "shikanime-labs/actions/command/land@v9";
-              "with" = {
-                github-token = "\${{ steps.createGithubAppToken.outputs.token }}";
-                email = "automata@shikanime.studio";
-                fullname = "Automata";
-                username = "yorha-automata";
-                gpg-passphrase = "\${{ secrets.GPG_PASSPHRASE }}";
-                gpg-private-key = "\${{ secrets.GPG_PRIVATE_KEY }}";
-                sign-commits = true;
-              }
-              // cfg.settings.land;
             }
           ];
         };
