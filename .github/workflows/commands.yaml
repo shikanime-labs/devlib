@@ -19,10 +19,10 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-labs/actions/nix/setup@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/nix/setup@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-labs/actions/command/backport@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/command/backport@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
@@ -40,10 +40,10 @@ jobs:
           permission-issues: write
           permission-pull-requests: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-labs/actions/nix/setup@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/nix/setup@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-labs/actions/command/close@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/command/close@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
           username: yorha-automata
@@ -60,10 +60,10 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-labs/actions/nix/setup@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/nix/setup@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-labs/actions/command/rebase@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/command/rebase@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           email: automata@shikanime.studio
           fullname: Automata
@@ -84,9 +84,9 @@ jobs:
           permission-issues: write
           permission-pull-requests: write
           private-key: ${{ secrets.OPERATOR_PRIVATE_KEY }}
-      - uses: shikanime-labs/actions/nix/setup@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/nix/setup@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
-      - uses: shikanime-labs/actions/command/run@a91a9b57c78121e303aa30aea2d8ed2ee03ff45f # v9
+      - uses: shikanime-labs/actions/command/run@8144b45cf1aed7ee09337cbca6b7d94b4693ef5e # v9
         with:
           github-token: ${{ steps.createGithubAppToken.outputs.token }}
