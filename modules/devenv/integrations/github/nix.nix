@@ -18,6 +18,22 @@ in
   options.github.workflows.nix = {
     enable = mkEnableOption "nix";
 
+    cachix-name = mkOption {
+      type = types.str;
+      default = "shikanime-studio";
+      description = ''
+        Cachix cache the workflow reads and writes. Emits the cache as a
+        substituter in nix.conf (raw drv builds read no flake nixConfig)
+        and defaults the callers' cachix-name to it.
+      '';
+    };
+
+    cachix-public-key = mkOption {
+      type = types.str;
+      default = "shikanime-studio.cachix.org-1:KxV6aDFU81wzoR9u6pF1uq0dQbUuKbodOSP8/EJHXO0=";
+      description = "Trusted public key for the cachix-name cache.";
+    };
+
     settings = {
       checkout = mkOption {
         type = types.submodule { freeformType = yamlFormat.type; };
@@ -101,6 +117,10 @@ in
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
+                  extra-config = ''
+                    extra-substituters = https://${cfg.cachix-name}.cachix.org
+                    extra-trusted-public-keys = ${cfg.cachix-public-key}
+                  '';
                   extra-platforms = "\${{ matrix.system == 'x86_64-linux' && 'arm64' || matrix.system == 'aarch64-linux' && 'amd64' || '' }}";
                   github-token = githubToken;
                 }
@@ -158,6 +178,10 @@ in
                 "with" = {
                   cachix-auth-token = "\${{ secrets.CACHIX_AUTH_TOKEN }}";
                   cachix-name = "\${{ inputs['cachix-name'] }}";
+                  extra-config = ''
+                    extra-substituters = https://${cfg.cachix-name}.cachix.org
+                    extra-trusted-public-keys = ${cfg.cachix-public-key}
+                  '';
                   extra-platforms = "\${{ matrix.system == 'x86_64-linux' && 'arm64' || matrix.system == 'aarch64-linux' && 'amd64' || '' }}";
                   github-token = githubToken;
                 }
