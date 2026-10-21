@@ -11,10 +11,10 @@ body:
       required: true
 
   - type: textarea
-    id: context
+    id: references
     attributes:
-      label: Context
-      description: Link anything that helps whoever picks this up.
+      label: References
+      description: Related issues, PRs, discussions, or documents — anything that helps whoever picks this up.
       placeholder: Parent issue, prior discussion, related PRs...
     validations:
       required: false

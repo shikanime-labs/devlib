@@ -19,3 +19,12 @@ body:
       placeholder: After the improvement, ...
     validations:
       required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Related issues, PRs, discussions, or documents — anything that gives more context. Leave empty if none.
+      placeholder: https://github.com/...
+    validations:
+      required: false
