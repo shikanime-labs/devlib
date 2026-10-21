@@ -1,4 +1,11 @@
-{ lib, ... }: with lib;
+{ lib, ... }:
+
+with lib;
+
+let
+  cachixName = "shikanime-studio";
+  cachixPublicKey = "shikanime-studio.cachix.org-1:KxV6aDFU81wzoR9u6pF1uq0dQbUuKbodOSP8/EJHXO0=";
+in
 {
   containers = mkForce { };
 
@@ -8,9 +15,21 @@
       commands.enable = true;
       integration.enable = true;
       release.enable = true;
+
+      nix.cachix-name = cachixName;
+      nix.cachix-public-key = cachixPublicKey;
+
+      skaffold.enable = true;
+      skaffold.settings.setup-nix = {
+        cachix-name = cachixName;
+        extra-config = ''
+          extra-substituters = https://${cachixName}.cachix.org
+          extra-trusted-public-keys = ${cachixPublicKey}
+        '';
+      };
     };
 
-    settings.workflows.integration.jobs.nix."with"."cachix-name" = "shikanime-studio";
-    settings.workflows.release.jobs.nix."with"."cachix-name" = "shikanime-studio";
+    settings.workflows.integration.jobs.nix."with"."cachix-name" = cachixName;
+    settings.workflows.release.jobs.nix."with"."cachix-name" = cachixName;
   };
 }
