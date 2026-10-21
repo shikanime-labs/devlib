@@ -130,6 +130,7 @@ in
 
           build-render = {
             name = "Build & Render";
+            "if" = "\${{ hashFiles('skaffold.yaml') != '' }}";
             runs-on = "ubuntu-latest";
             permissions = {
               contents = "read";
