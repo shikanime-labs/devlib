@@ -12,7 +12,6 @@ in
   github = {
     enable = true;
     workflows = {
-      commands.enable = true;
       integration.enable = true;
       release.enable = true;
 
