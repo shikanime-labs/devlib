@@ -27,7 +27,6 @@ let
 in
 {
   imports = [
-    ./github/commands.nix
     ./github/javascript.nix
     ./github/integration.nix
     ./github/nix.nix
