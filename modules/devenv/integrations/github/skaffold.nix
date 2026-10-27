@@ -71,15 +71,17 @@ in
         on = {
           workflow_call = {
             secrets.OPERATOR_PRIVATE_KEY.required = true;
-            inputs.push = {
-              type = "boolean";
-              default = true;
-              description = "Whether to push images during build";
-            };
-            inputs.otel-endpoint = {
-              type = "string";
-              default = "";
-              description = "OTLP collector endpoint for tracing";
+            inputs = {
+              push = {
+                type = "boolean";
+                default = true;
+                description = "Whether to push images during build";
+              };
+              otel-endpoint = {
+                type = "string";
+                default = "";
+                description = "OTLP collector endpoint for tracing";
+              };
             };
           };
           workflow_dispatch = { };
