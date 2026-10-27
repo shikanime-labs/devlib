@@ -76,6 +76,11 @@ in
               default = true;
               description = "Whether to push images during build";
             };
+            inputs.otel-endpoint = {
+              type = "string";
+              default = "";
+              description = "OTLP collector endpoint for tracing";
+            };
           };
           workflow_dispatch = { };
         };
