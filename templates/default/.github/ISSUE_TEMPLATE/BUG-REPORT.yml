@@ -10,7 +10,6 @@ body:
       placeholder: Per https://..., the product should...
     validations:
       required: true
-
   - type: textarea
     id: observed_behavior
     attributes:
@@ -23,7 +22,6 @@ body:
         2. ...
     validations:
       required: true
-
   - type: textarea
     id: environment
     attributes:
@@ -36,7 +34,6 @@ body:
       render: bash
     validations:
       required: true
-
   - type: textarea
     id: evidence
     attributes:
@@ -45,7 +42,6 @@ body:
       placeholder: Capture, log or link...
     validations:
       required: false
-
   - type: textarea
     id: references
     attributes:

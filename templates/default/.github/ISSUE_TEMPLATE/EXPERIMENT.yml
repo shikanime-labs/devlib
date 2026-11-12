@@ -10,7 +10,6 @@ body:
       placeholder: We believe that ... — parent #...
     validations:
       required: true
-
   - type: textarea
     id: demands
     attributes:
@@ -19,7 +18,6 @@ body:
       placeholder: "- [ ] ..."
     validations:
       required: true
-
   - type: textarea
     id: protocol
     attributes:
@@ -28,7 +26,6 @@ body:
       placeholder: Measure ..., compare ...
     validations:
       required: true
-
   - type: textarea
     id: observations
     attributes:
@@ -38,7 +35,6 @@ body:
         - YYYY-MM-DD: ...
     validations:
       required: false
-
   - type: textarea
     id: references
     attributes:

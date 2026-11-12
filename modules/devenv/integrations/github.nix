@@ -22,6 +22,10 @@ let
       artipacked.disable = true;
       secrets-outside-env.disable = true;
       unpinned-uses.disable = true;
+      # The repo-tracked Commands workflow runs slash commands on
+      # issue_comment; zizmor has no allowlist for that trigger, so
+      # exempt the workflow file rather than disabling the audit.
+      dangerous-triggers.ignore = [ "commands.yaml" ];
     };
   };
 in
