@@ -84,7 +84,20 @@ in
               };
             };
           };
-          workflow_dispatch = { };
+          workflow_dispatch = {
+            inputs = {
+              push = {
+                type = "boolean";
+                default = true;
+                description = "Whether to push images during build";
+              };
+              otel-endpoint = {
+                type = "string";
+                default = "";
+                description = "OTLP collector endpoint for tracing";
+              };
+            };
+          };
         };
 
         permissions.contents = "read";
