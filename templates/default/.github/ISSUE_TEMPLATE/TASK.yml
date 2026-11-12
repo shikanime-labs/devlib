@@ -9,7 +9,6 @@ body:
       placeholder: Do ... so that ...
     validations:
       required: true
-
   - type: textarea
     id: definition_of_done
     attributes:
@@ -18,7 +17,6 @@ body:
       placeholder: "- [ ] ..."
     validations:
       required: true
-
   - type: textarea
     id: references
     attributes:

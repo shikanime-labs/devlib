@@ -10,7 +10,6 @@ body:
       placeholder: Per https://..., the current behavior is...
     validations:
       required: true
-
   - type: textarea
     id: expected_state
     attributes:
@@ -19,7 +18,6 @@ body:
       placeholder: After the improvement, ...
     validations:
       required: true
-
   - type: textarea
     id: references
     attributes:
